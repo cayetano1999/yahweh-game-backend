@@ -1,0 +1,27 @@
+#!/bin/sh
+
+local_branch_name="$(git rev-parse --abbrev-ref HEAD)"
+branch_prefix='(hotfix|feature|release)'
+branch_issue='([a-zA-Z]{1,4}[0-9]{1,5})'
+branch_hyphen='\-'
+branch_title_size=70
+branch_title="[a-z0-9${branch_hyphen}]{5,${branch_title_size}}"
+valid_branch_regex="^(${branch_prefix}\/${branch_issue}(${branch_hyphen})${branch_title})$"
+
+if [[ ! $local_branch_name =~ $valid_branch_regex || $local_branch_name == *\- || $local_branch_name == *\_ ]]; then
+    echo "There is something wrong with your branch name."
+    echo "Branches names in this project must adhere to the following rules:"
+    echo "  * Must have a valid prefix (hotfix|feature|release) followed by a slash (/)."
+    echo "  * Must include the project key and the issue number followed by a hyphen (-). e.g. IB123-descriptive-title"
+    echo "  * Must include a fancy title."
+    echo "  * Must not end with a hyphen (-) neither underscore (_)."
+    echo "  * Must not have space character."
+    echo "  * Title must not exceed ${branch_title_size} characters."
+    echo
+    tput setaf 1
+    echo "The operation will be rejected until you rename your branch to a valid name."
+    tput sgr0
+    exit 1
+fi
+
+exit 0

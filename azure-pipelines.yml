@@ -1,0 +1,47 @@
+trigger:
+  - main
+variables:
+    containerRegistry: 'Azure Container Registry'
+    sonarQubeServiceName: 'SonarQube'
+    sonarQubeKey: 'typescript-micro-nestjs-backend-template'
+    projectName: 'typescript-micro-nestjs-backend-template'
+    
+pool:
+  vmImage: 'ubuntu-latest'
+  
+stages:
+  - stage: build
+    displayName: build and test
+  
+    jobs:
+    - job: gittools
+      steps:
+      - template: .azuredevops/pipelines/gittools.yml
+        parameters:
+          projectType: 'npm'
+          changelog: './CHANGELOG.md'
+          
+    - job: build
+      dependsOn: gittools
+      steps:
+      - template: .azuredevops/pipelines/build.yml
+        parameters:
+          projectName: '$(projectName)'
+  
+  - stage: test
+    displayName: validation
+  
+    jobs:
+    - job: sonarqube
+      steps:
+      - template: .azuredevops/pipelines/sonarqube.yml
+        parameters:
+          name: '$(SonarQubeServiceName)'
+          key: '$(sonarQubeKey)'
+          project: '$(projectName)'
+          timeout: '300'
+          lcov: '$(System.DefaultWorkingDirectory)/coverage/lcov.info'
+          projectName: '$(projectName)'
+    - job: prettier
+      steps:
+      - template: .azuredevops/pipelines/prettier.yml

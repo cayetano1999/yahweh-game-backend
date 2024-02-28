@@ -1,0 +1,38 @@
+parameters:
+- name: report
+  type: string
+  default: '**/*.xml'
+- name: projectName
+  type: string
+  default: ''
+
+steps:
+- task: DownloadPipelineArtifact@2
+  displayName: 'Download Build Artifacts'
+  inputs:
+    artifact: ${{ parameters.projectName }}
+    path: '$(System.DefaultWorkingDirectory)'
+- script: |
+    npm install -g typescript
+  displayName: 'Install typescript'
+- task: Npm@1
+  inputs:
+    command: 'install'
+  displayName: 'Install Dependancies'
+- script: |
+    npm run test:cov
+  displayName: 'Run Tests'
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
+  inputs:
+    testRunner: JUnit
+    testResultsFiles: '{{ parameters.report }}'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Code Coverage Results'
+  inputs: 
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'

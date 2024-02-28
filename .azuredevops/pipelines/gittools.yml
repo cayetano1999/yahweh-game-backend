@@ -1,0 +1,29 @@
+parameters:
+- name: projectType
+  type: string
+  default: 'dotnet'
+- name: changelog
+  type: string
+  default: './CHANGELOG.md'
+  
+steps:
+- checkout: self
+  persistCredentials: true
+- task: PowerShell@2
+  displayName: 'Update version'
+  name: versionTask
+  condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  inputs:
+    filePath: 'tools/update-version/Update-Version.ps1'
+    failOnStderr: false
+    pwsh: true
+    arguments:
+      -Changelog '${{ parameters.changelog }}'
+      -URL $(Build.Repository.Uri)
+      -AuthorName '$(Build.RequestedFor)'
+      -AuthorEmail '$(Build.RequestedForEmail)'
+      -Branch ("$(Build.SourceBranch)" -Replace 'refs/heads/','')
+      -PathPackageJson .
+      -BuildNumber $(Build.BuildNumber)
+      -Stage "develop"
+      -Type ${{ parameters.projectType }}

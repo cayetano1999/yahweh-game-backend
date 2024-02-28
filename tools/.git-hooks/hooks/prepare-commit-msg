@@ -1,0 +1,27 @@
+#!/bin/sh
+
+message=`head -n 1 "$1"`
+message_size=$(echo -n $message | wc -m)
+commit_title_size=70
+commit_scope_size=15
+commit_type="(chore|demo|docs|feat|fix|refactor|revert|style|test|ci)"
+commit_scope="(\([a-z]{2,${commit_scope_size}}\))?"
+commit_title="\:\ ([a-zA-Zá-úÁ-Ú0-9\ ]{10,${commit_title_size}})"
+pattern="^${commit_type}${commit_scope}${commit_title}$"
+
+if [[ ! $message =~ $pattern ]]; then
+    echo "There is something wrong with the commit message you have provided."
+    echo "Commits messages in this project must adhere to the following rules:"
+    echo "  * Must have a valid prefix ${commit_type} followed by a colon (:)."
+    echo "  * Should include a scope (not exceed ${commit_scope_size} characters) as part of the commit type. The scope must be inside of parentheses."
+    echo "  * Must include a fancy title."
+    echo "  * Must not end with a space character."
+    echo "  * Title must not exceed ${commit_title_size} characters."
+    echo
+    tput setaf 1
+    echo "The operation will be rejected until you fix the commit message."
+    tput sgr0
+    exit 1
+fi
+
+exit 0

@@ -1,0 +1,56 @@
+parameters:
+- name: projectName
+  type: string
+  default: ''
+- name: report
+  type: string
+  default: 'dist/test/*.xml'
+
+steps:
+- task: npmAuthenticate@0
+  inputs:
+    workingFile: .npmrc
+
+- task: NodeTool@0
+  displayName: 'Install Node.js'
+  inputs:
+    versionSpec: '16.x'
+
+- script: |
+    npm install -g typescript
+    npm install -g @nestjs/cli
+  displayName: 'Install typescript and nestjs'
+- task: Npm@1
+  inputs:
+    command: 'install'
+  displayName: 'Install Dependencies'
+
+- script: |
+    npm run build
+  displayName: 'Build App'
+
+# TODO: Remove
+- script: |
+    npm run test:cov
+  displayName: 'Run Tests'
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
+  inputs:
+    testRunner: JUnit
+    testResultsFiles: '{{ parameters.report }}'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Code Coverage Results'
+  inputs: 
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'
+
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Build Artifacts'
+  inputs:
+    targetPath: '$(System.DefaultWorkingDirectory)'
+    artifactName: ${{ parameters.projectName }}

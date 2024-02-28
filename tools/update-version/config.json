@@ -1,0 +1,57 @@
+{
+  "VersionPrefix": "v",
+  "LatestTagName": "latest",
+  "StableTagName": "stable",
+  "Branches": [
+    {
+      "Name": "^develop$",
+      "IsStable": false,
+      "Sufix": "-alpha.",
+      "GenerateChangelog": true
+    },
+    {
+      "Name": "^main$",
+      "IsStable": true,
+      "GenerateChangelog": true
+    },
+    {
+      "Name": "^master$",
+      "IsStable": true,
+      "GenerateChangelog": true
+    },
+    {
+      "Name": "^feature/*",
+      "IsStable": false,
+      "Skip": true,
+      "GenerateChangelog": true
+    },
+    {
+      "Name": "^release/*",
+      "IsStable": false,
+      "Sufix": "-beta.",
+      "GenerateChangelog": true
+    },
+    {
+      "Name": "^rc/*",
+      "IsStable": false,
+      "Sufix": "-rc.",
+      "GenerateChangelog": true
+    }
+  ],
+  "Keywords": {
+    "Versions": {
+      "Major": "major",
+      "Minor": "minor",
+      "Patch": "patch"
+    },
+    "Changelog": {
+      "Placeholder": "<!-- [NEXT_ENTRY] -->",
+      "Added": "added",
+      "Changed": "changed",
+      "Removed": "removed",
+      "Fixed": "fixed",
+      "Deprecated": "deprecated",
+      "Security": "security"
+    }
+  }
+}

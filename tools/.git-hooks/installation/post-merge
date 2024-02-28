@@ -1,0 +1,3 @@
+#!/bin/sh
+# Call script in tools to run any task after git pull is done.
+./tools/.git-hooks/hooks/post-merge
