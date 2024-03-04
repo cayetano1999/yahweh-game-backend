@@ -1,13 +1,13 @@
-# **{{typescript-micro-nestjs-backend-template}}
+# Micro Promotions
 
 [![Build Status](https://dev.azure.com/APAPDigital/APAP%20-%20Templates/_apis/build/status/nestjs-micro-backend-template?branchName=main)](https://dev.azure.com/APAPDigital/APAP%20-%20Templates/_build?definitionId=305)
 # Descripcion del Template
-La finalidad de este template, es de servir como guía incial para los proyectos de la tecnología [NestJs](https://nestjs.com/) dentro de el ecosistema de APAP.
+La finalidad de este microservicio es servir como eje principal para la creacion de promociones y productos preaprobados para la aplicacion Movil, este esta hecho con [NestJs](https://nestjs.com/).
 
 **Tabla de contenido**
 <!-- La tabla de contenido se genera de forma automática utilizando la extensión de visual studio code Markdown All in One (yzhang.markdown-all-in-one). -->
 
-- [**{{typescript-micro-backend-template}}**](#typescript-micro-backend-template)
+- [Micro Promotions](#typescript-micro-backend-template)
   - [**Especificaciones**](#especificaciones)
   - [**Composición**](#composición)
   - [**Instalación**](#instalación)
@@ -27,7 +27,7 @@ La finalidad de este template, es de servir como guía incial para los proyectos
 * [Visual Studio Code IDE](https://code.visualstudio.com/)
 * [GIT](https://git-scm.com/)
 * [Docker](https://www.docker.com/)
-* [TYPEORM](https://typeorm.com/)
+* [Mongoose](https://mongoosejs.com/)
 
 ### Librerías utilizadas (propias de APAP)
 * [@apap/logger]
@@ -37,27 +37,27 @@ La finalidad de este template, es de servir como guía incial para los proyectos
 ## **Composición**
 <!-- Estructura de archivos/elementos que componen el microservicio. Se recomienda solo colocar lo contenido dentro de la carpeta src y que corresponda al desarrollo realizado. -->
 ### Árbol de estructura del proyecto: 
-.
-├── .azdevops
-├── dist
-├── src/
-│   ├── modules/
-│   │   ├── cache/
-│   │   │   ├── config
-│   │   │   ├── interfaces
-│   │   │   └── services
-│   │   ├── config
-│   │   ├── database/
-│   │   │   └── config
-│   │   ├── http/
-│   │   │   └── config
-│   │   ├── logger/
-│   │   │   └── services
-│   │   └── rabbit
-|   |   |__ swagger
-|   |   |__ auth
-└── test
-|__ docs
+.\
+├── .azdevops\
+├── dist\
+├── src/\
+│   ├── modules/\
+│   │   ├── cache/\
+│   │   │   ├── config\
+│   │   │   ├── interfaces\
+│   │   │   └── services\
+│   │   ├── config\
+│   │   ├── database/\
+│   │   │   └── config\
+│   │   ├── http/\
+│   │   │   └── config\
+│   │   ├── logger/\
+│   │   │   └── services\
+│   │   └── rabbit\
+|   |   |__ swagger\
+|   |   |__ auth\
+└── test\
+|__ docs\
 
 
 * `dist`: contiene los archivos resultado luego de ejecutar `npm run build`.
@@ -120,12 +120,8 @@ A continuación, se listan las variables de entorno utilizadas en el microservic
 |Variable|Tipo|Comentario|
 |-|-|-|
 |PORT|number|Variable de entorno para especificar el puerto|
-|DATABASE_HOST|string|Variable de entorno para especificar host de la base de datos|
-|DATABASE_PORT|number|Variable de entorno para especificar el puerto de la base de datos|
-|DATABASE_USERNAME|string|Variable de entorno para especificar el usuario de base de datos|
-|DATABASE_PASSWORD|string|Variable de entorno para especificar el puerto|
-|DATABASE_LOG|boolean|Variable de entorno para especificar si Typeorm loggea o no|
-|DATABASE_NAME|string|Variable de entorno para especificar el nombre de la base de datos|
+|DATABASE_URL|string|Variable de entorno para especificar host de la base de datos|
+|DATABASE_NAME|number|Variable de entorno para especificar el puerto de la base de datos|
 |HTTP_TIMEOUT|number|Variable de entorno para especificar el tiempo de espera en una peticion HTTP|
 |HTTP_MAX_REDIRECTS|number|Variable de entorno para la cantidad maxima de redireccines HTTP por peticion.|
 |KEYCLOAK_CLIENT|string|Variable de entorno para especificar URL del cliente de Keycloak|

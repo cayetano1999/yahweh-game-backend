@@ -1,5 +1,5 @@
 import { Connection } from 'mongoose';
-import { IntegrationSchema } from './schemas/integration.schema';
+import { IntegrationSchema } from '../schemas/integration.schema';
 
 export const integrationProviders = [
   {

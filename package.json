@@ -1,8 +1,8 @@
 {
-  "name": "apap-rules-engine",
+  "name": "micro-promotions",
   "version": "0.0.1",
   "description": "Proyecto para creacion de reglas para preaprobados y promociones",
-  "author": "Alejandro Amador Mercedes - APAP",
+  "author": "APAP",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

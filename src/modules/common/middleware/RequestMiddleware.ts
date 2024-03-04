@@ -11,8 +11,8 @@ export class HttpRequestMiddleware implements NestMiddleware {
       req.headers['requestId'] = uuidv4();
       this.logger.log({
         requestId: req.headers['requestId'] as any,
-        serviceName: `Se ha generado el  requestId ${req.headers['requestId']}`,
-        error: '',
+        serviceName: 'micro-promotions',
+        description: `Se ha generado el  requestId ${req.headers['requestId']}`,
       });
     }
     next();
