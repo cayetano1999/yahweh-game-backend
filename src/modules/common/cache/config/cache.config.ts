@@ -6,6 +6,5 @@ export default registerAs('cache', () => ({
   tls: {
     servername: process.env.CACHE_HOST,
   },
-  expiration: +process.env.CACHE_EXP || 8600
+  expiration: +process.env.CACHE_EXP || 8600,
 }));
-

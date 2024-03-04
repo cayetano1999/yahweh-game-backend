@@ -11,6 +11,7 @@ import rabbitConfig from './modules/common/rabbit/config/rabbit.config';
 import httpConfig from './modules/common/http/config/htttp.config';
 import cacheConfig from './modules/common/cache/config/cache.config';
 import enviroment from './modules/common/config/config.module';
+import { CacheManagerModule } from './modules/common/cache/cache.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
