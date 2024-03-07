@@ -12,9 +12,8 @@ steps:
 - task: PowerShell@2
   displayName: 'Update version'
   name: versionTask
-  condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   inputs:
-    filePath: 'tools/update-version/Update-Version.ps1'
+    filePath: 'tools/Update-Version.ps1'
     failOnStderr: false
     pwsh: true
     arguments:
@@ -22,8 +21,7 @@ steps:
       -URL $(Build.Repository.Uri)
       -AuthorName '$(Build.RequestedFor)'
       -AuthorEmail '$(Build.RequestedForEmail)'
-      -Branch ("$(Build.SourceBranch)" -Replace 'refs/heads/','')
-      -PathPackageJson .
-      -BuildNumber $(Build.BuildNumber)
-      -Stage "develop"
+      -Branch '$(Build.SourceBranchName)'
+      -PathVersion .
+      -Stage "dev"
       -Type ${{ parameters.projectType }}

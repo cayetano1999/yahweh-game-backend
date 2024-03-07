@@ -1,47 +1,56 @@
 trigger:
   - main
+
 variables:
-    containerRegistry: 'Azure Container Registry'
-    sonarQubeServiceName: 'SonarQube'
-    sonarQubeKey: 'typescript-micro-nestjs-backend-template'
-    projectName: 'typescript-micro-nestjs-backend-template'
-    
+  containerRegistry: "Azure Container Registry"
+  sonarQubeServiceName: "SonarConnection"
+  projectName: "micro-promotions"
+
 pool:
-  vmImage: 'ubuntu-latest'
-  
+  vmImage: "ubuntu-latest"
+
 stages:
-  - stage: build
-    displayName: build and test
-  
+  - stage: codeAnalyze
+    displayName: code analyze
     jobs:
-    - job: gittools
-      steps:
-      - template: .azuredevops/pipelines/gittools.yml
-        parameters:
-          projectType: 'npm'
-          changelog: './CHANGELOG.md'
-          
-    - job: build
-      dependsOn: gittools
-      steps:
-      - template: .azuredevops/pipelines/build.yml
-        parameters:
-          projectName: '$(projectName)'
-  
-  - stage: test
-    displayName: validation
-  
+      # - job: test
+      #   steps:
+      #     - template: .azuredevops/pipelines/test.yml
+      #       parameters:
+      #         projectName: "$(projectName)"
+      #         resultsFormat: "jUnit"
+      #         resultsFiles: "junit.xml"
+      #         resultsDirectory: "$(System.DefaultWorkingDirectory)/.tests"
+
+      - job: sonarqube
+        # dependsOn: test
+        steps:
+          - template: .azuredevops/pipelines/sonarqube.yml
+            parameters:
+              # resultsDirectory: "$(System.DefaultWorkingDirectory)/.tests"
+              name: "$(SonarQubeServiceName)"
+
+  - stage: gittools
+    displayName: gittools
+    dependsOn: codeAnalyze
     jobs:
-    - job: sonarqube
-      steps:
-      - template: .azuredevops/pipelines/sonarqube.yml
-        parameters:
-          name: '$(SonarQubeServiceName)'
-          key: '$(sonarQubeKey)'
-          project: '$(projectName)'
-          timeout: '300'
-          lcov: '$(System.DefaultWorkingDirectory)/coverage/lcov.info'
-          projectName: '$(projectName)'
-    - job: prettier
-      steps:
-      - template: .azuredevops/pipelines/prettier.yml
+      - job: gittools
+        condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+        steps:
+          - template: .azuredevops/pipelines/gittools.yml
+            parameters:
+              projectType: "npm"
+              changelog: "./CHANGELOG.md"
+
+  - stage: deploy
+    displayName: deploy
+    dependsOn: [codeAnalyze, gittools]
+    jobs:
+      - job: docker
+        condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+        steps:
+          - template: .azuredevops/pipelines/docker.yml
+            parameters:
+              dockerfile: "**/Dockerfile"
+              repository: "$(projectName)"
+              registry: "$(containerRegistry)"

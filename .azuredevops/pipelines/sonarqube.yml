@@ -1,48 +1,35 @@
 parameters:
-- name: name
-  type: string
-  default: 'SonarQube'
-- name: key
-  type: string
-  default: ''
-- name: project
-  type: string
-  default: ''
-- name: projectName
-  type: string
-  default: ''
-- name: timeout
-  type: string
-  default: '300'
-- name: lcov
-  type: string
-  default: ''
+  - name: name
+    type: string
+    default: ""
+  - name: projectName
+    type: string
+    default: ""
+  - name: timeout
+    type: string
+    default: "300"
+  - name: resultsDirectory
+    type: string
+    default: ""
 
 steps:
-- task: DownloadPipelineArtifact@2
-  displayName: 'Download Build Artifacts'
-  inputs:
-    artifact: ${{ parameters.projectName }}
-    path: '$(System.DefaultWorkingDirectory)'
+  # - task: DownloadPipelineArtifact@2
+  #   displayName: "Download Build Artifacts"
+  #   inputs:
+  #     artifact: "${{ parameters.projectName }}-tests"
+  #     path: "${{ parameters.resultsDirectory }}"
 
-- task: SonarQubePrepare@5
-  displayName: 'Sonar Qube Prepare'
-  inputs:
-    SonarQube: ${{ parameters.name }}
-    scannerMode: 'CLI'
-    configMode: 'manual'
-    cliProjectKey: ${{ parameters.key }}
-    projectName: ${{ parameters.project }}
-    extraProperties: |
-      sonar.sources=src
-      sonar.javascript.lcov.reportPaths=${{ parameters.lcov }}
-      sonar.test.inclusions=src/**/*.spec.ts
-      sonar.exclusions=src/**/*.module.ts
+  - task: SonarQubePrepare@5
+    displayName: "Sonar Qube Prepare"
+    inputs:
+      SonarQube: ${{ parameters.name }}
+      scannerMode: "CLI"
+      configMode: "file"
 
-- task: SonarQubeAnalyze@5
-  displayName: 'Sonar Qube Analyze'
+  - task: SonarQubeAnalyze@5
+    displayName: "Sonar Qube Analyze"
 
-- task: SonarQubePublish@5
-  displayName: 'Sonar Qube Publish'
-  inputs:
-    pollingTimeoutSec: ${{ parameters.timeout }}
+  - task: SonarQubePublish@5
+    displayName: "Sonar Qube Publish"
+    inputs:
+      pollingTimeoutSec: ${{ parameters.timeout }}
