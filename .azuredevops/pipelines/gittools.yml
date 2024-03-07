@@ -13,7 +13,7 @@ steps:
   displayName: 'Update version'
   name: versionTask
   inputs:
-    filePath: 'tools/Update-Version.ps1'
+    filePath: 'tools/update-version/Update-Version.ps1'
     failOnStderr: false
     pwsh: true
     arguments:

@@ -1,10 +1,9 @@
-# TODO: Support other types
-# TODO: Support multiple files
 Function Get-ProjectVersion {
   Param
   (
     [Parameter( Mandatory = $True)][System.IO.DirectoryInfo]$Path,
-    [Parameter( Mandatory = $True)][ValidateSet('npm', 'dotnet', 'gradle', 'maven')][string]$Type
+    [Parameter( Mandatory = $True)][ValidateSet('npm', 'dotnet', 'gradle', 'maven')][string]$Type,
+    [Parameter( Mandatory = $False)][string]$BuildNumber
   )
   BEGIN {
     If (-Not(Test-Path $Path)) {
@@ -30,19 +29,21 @@ Function Get-ProjectVersion {
         If (-Not $Path) {
           Write-Error 'Path not defined' -ErrorAction Stop
         }
-        $Found = $False
-        Get-ChildItem -Recurse $Path | Where-Object { $_ -Like '*.csproj' } | ForEach-Object {
-          [xml]$ProjectConfigXml = Get-Content $_.FullName
+        $ProjectPath = (Get-ChildItem -Recurse $Path | Where-Object { $_ -Like '*.csproj' })
+        If($ProjectPath){
+          [xml]$ProjectConfigXml = Get-Content $ProjectPath[0].FullName
           $ProjectVersion = $ProjectConfigXml.Project.PropertyGroup.Version
-          break
         }
-        If (-Not $Found) {
+        Else{
           Write-Error "Project file not found" -ErrorAction Stop
         }
       }
       default {
         Write-Error "Type '$Type' not implemented" -ErrorAction Stop
       }
+    }
+    If ($Stage -ne "dev") {
+      $ProjectVersion = $BuildNumber
     }
     [string[]]$ProjectVersionSplit = $ProjectVersion.Split('.')
     Try {

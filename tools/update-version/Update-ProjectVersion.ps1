@@ -17,10 +17,11 @@ Function Update-ProjectVersion {
       dotnet {
         ForEach ($File in $Files) {
           [xml]$ProjectConfigXml = Get-Content $File
-          $ProjectConfigXml.Project.PropertyGroup.Version = $Version
+          If($ProjectConfigXml.Project.PropertyGroup.Version){
+            $ProjectConfigXml.Project.PropertyGroup.Version = $Version
+          }
           $ProjectConfigXml.OuterXml | Out-File $File
           & "$PSScriptRoot\Format-XML.ps1" -File $File -Indent 2
-          return $Version
         }
       }
       default {
