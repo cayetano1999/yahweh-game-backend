@@ -26,5 +26,10 @@ RUN chgrp -R 0 /usr/src/app && \
     chmod -R g=u /usr/src/app
  
 # chown -R $USER .
- 
-CMD [ "node", "dist/src/main" ]
+
+EXPOSE 8080
+
+CMD [ "node", "dist/main.js" ]
+
+HEALTHCHECK --interval=2m --timeout=3s \
+  CMD curl -f http://localhost:8080/ || exit 1
