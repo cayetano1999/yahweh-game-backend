@@ -1,52 +1,44 @@
 parameters:
-- name: dockerfile
-  type: string
-  default: '**/Dockerfile'
-- name: buildContext
-  type: string
-  default: '.'
-- name: registry
-  type: string
-  default: ''
-- name: repository
-  type: string
-  default: ''
-- name: projectName
-  type: string
-  default: ''
+  - name: dockerfile
+    type: string
+    default: "**/Dockerfile"
+  - name: buildContext
+    type: string
+    default: "."
+  - name: registry
+    type: string
+    default: ""
+  - name: repository
+    type: string
+    default: ""
 
 steps:
-- task: DownloadPipelineArtifact@2
-  displayName: 'Download Build Artifacts'
-  inputs:
-    artifact: ${{ parameters.projectName }}
-    path: '$(System.DefaultWorkingDirectory)'
-- task: npmAuthenticate@0
-  inputs:
-    workingFile: .npmrc
+  - checkout: self
+    lfs: true
+    persistCredentials: true
+    clean: true
 
-- task: Docker@2
-  displayName: 'Docker Build & Push'
-  condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-  inputs:
-    command: "buildAndPush"
-    containerRegistry: ${{ parameters.registry }}
-    repository: ${{ parameters.repository }}
-    buildContext: ${{ parameters.buildContext }}
-    Dockerfile: ${{ parameters.dockerfile }}
-    tags: |
-      $(version)
-      latest
+  - task: npmAuthenticate@0
+    inputs:
+      workingFile: .npmrc
+  
+  - task: Bash@3
+    displayName: "git pull"
+    inputs:
+      targetType: 'inline'
+      script: |
+        git fetch
+        git checkout main
+        git pull origin main
 
-- task: Docker@2
-  condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-  inputs:
-    command: 'save'
-    arguments: '--output $(build.artifactstagingdirectory)/${{ parameters.repository }}.image.tar azcregistryapap01.azurecr.io/$(projectName):$(version)'
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish docker Artifacts'
-  condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
+  - task: Docker@2
+    displayName: "Docker Build & Push"
+    inputs:
+      command: "buildAndPush"
+      containerRegistry: ${{ parameters.registry }}
+      repository: ${{ parameters.repository }}
+      buildContext: ${{ parameters.buildContext }}
+      Dockerfile: ${{ parameters.dockerfile }}
+      tags: |
+        $(Build.BuildNumber)
+        latest

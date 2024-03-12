@@ -1,6 +1,6 @@
 {
   "name": "micro-promotions",
-  "version": "0.0.1",
+  "version": "0.0.7-alpha.1",
   "description": "Proyecto para creacion de reglas para preaprobados y promociones",
   "author": "APAP",
   "private": true,

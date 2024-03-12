@@ -1,28 +1,35 @@
-FROM node:14.16.0-alpine3.10
-
+FROM node:16.14.0-alpine3.15
+ 
 ARG NPM_TOKEN
-
+ 
 # Create app directory
-
+ 
 WORKDIR /usr/src/app
-
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
+ 
 COPY package*.json ./
-
-# Install app dependencies
-RUN npm install
-
-# Bundle app source
+COPY tsconfig.json ./
 COPY . .
 
+RUN npm install -g typescript
+RUN npm install
+
+ 
+# Bundle app source
+COPY . .
+ 
 # Creates a "dist" folder with the production build
 RUN npm run build
-
+ 
 # Bundle app source
-
+ 
 RUN chgrp -R 0 /usr/src/app && \
     chmod -R g=u /usr/src/app
-
+ 
 # chown -R $USER .
 
-CMD [ "node", "dist/src/main" ]
+EXPOSE 8080
+
+CMD [ "node", "dist/main.js" ]
+
+HEALTHCHECK --interval=2m --timeout=3s \
+  CMD curl -f http://localhost:8080/ || exit 1

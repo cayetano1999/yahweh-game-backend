@@ -2,39 +2,40 @@
   "VersionPrefix": "v",
   "LatestTagName": "latest",
   "StableTagName": "stable",
-  "Branches": [
+  "Stages": [
     {
-      "Name": "^develop$",
+      "Name": "^prod$",
+      "IsStable": true,
+      "GenerateChangelog": true
+    },
+    {
+      "Name": "^staging$",
+      "IsStable": false,
+      "Sufix": "-rc.",
+      "GenerateChangelog": true
+    },
+    {
+      "Name": "^qa$",
+      "IsStable": false,
+      "Sufix": "-beta.",
+      "GenerateChangelog": true
+    },
+    {
+      "Name": "^dev$",
       "IsStable": false,
       "Sufix": "-alpha.",
       "GenerateChangelog": true
-    },
+    }
+  ],
+  "Branches": [
     {
       "Name": "^main$",
       "IsStable": true,
       "GenerateChangelog": true
     },
     {
-      "Name": "^master$",
+      "Name": "^develop$",
       "IsStable": true,
-      "GenerateChangelog": true
-    },
-    {
-      "Name": "^feature/*",
-      "IsStable": false,
-      "Skip": true,
-      "GenerateChangelog": true
-    },
-    {
-      "Name": "^release/*",
-      "IsStable": false,
-      "Sufix": "-beta.",
-      "GenerateChangelog": true
-    },
-    {
-      "Name": "^rc/*",
-      "IsStable": false,
-      "Sufix": "-rc.",
       "GenerateChangelog": true
     }
   ],
