@@ -2,11 +2,12 @@ import { Model } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
 import { Integration } from '../interfaces/integration.interface';
 import { Logger } from '../../common/logger/services/logger/logger.service';
+import { IntegrationConstats as IntegrationConstants } from '../constant';
 
 @Injectable()
 export class IntegrationService {
   constructor(
-    @Inject('INTEGRATION_MODEL')
+    @Inject(IntegrationConstants.ProviderName)
     private integrationModel: Model<Integration>,
     private readonly logger: Logger,
   ) {}
@@ -40,7 +41,7 @@ export class IntegrationService {
           url: '',
           facts: [
             {
-              name: 'preaprobado',
+              name: 'preAprobado',
               active: true,
               type: 'boolean',
             },

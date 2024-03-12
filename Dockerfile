@@ -6,31 +6,17 @@ ARG NPM_TOKEN
 
 WORKDIR /usr/src/app
 
-# Install app dependencies
-RUN npm cache clean --force
-
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
 
-COPY tsconfig.json ./
-
-COPY .npmrc .npmrc
-
-COPY src src
-
-COPY . .
-# COPY data data
-
-RUN npm install -g @nestjs/cli
-
-RUN npm install -g typescript
-
+# Install app dependencies
 RUN npm install
 
-RUN npm ci --only=production
+# Bundle app source
+COPY . .
 
+# Creates a "dist" folder with the production build
 RUN npm run build
-
-EXPOSE 8080
 
 # Bundle app source
 

@@ -1,11 +1,12 @@
 import { Connection } from 'mongoose';
 import { IntegrationSchema } from '../schemas/integration.schema';
+import { IntegrationConstats } from '../constant';
 
 export const integrationProviders = [
   {
-    provide: 'INTEGRATION_MODEL',
+    provide: IntegrationConstats.ProviderName,
     useFactory: (connection: Connection) =>
-      connection.model('Integration', IntegrationSchema),
+      connection.model(IntegrationConstats.ModelName, IntegrationSchema),
     inject: ['DATABASE_CONNECTION'],
   },
 ];
