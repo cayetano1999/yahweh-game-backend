@@ -24,6 +24,39 @@ export class IntegrationService {
 
       const defaultIntegrations = [
         {
+          name: 'APP Movil',
+          description:
+            'Integracion que incluye propiedades de la aplicacion movil',
+          url: '',
+          facts: [
+            {
+              name: 'debidaDiligencia',
+              active: true,
+              type: 'bool',
+            },
+            {
+              name: 'tieneCuentaAhorroDigital',
+              active: true,
+              type: 'bool',
+            },
+            {
+              name: 'tieneTarjetaDebitoDigital',
+              active: true,
+              type: 'bool',
+            },
+            {
+              name: 'primerLogin',
+              active: true,
+              type: 'bool',
+            },
+            {
+              name: 'montoCuentas',
+              active: true,
+              type: 'number',
+            },
+          ],
+        },
+        {
           name: 'SOMOS',
           description: 'Integracion que incluye propiedades de somos',
           url: '',
@@ -44,6 +77,11 @@ export class IntegrationService {
               name: 'preAprobado',
               active: true,
               type: 'boolean',
+            },
+            {
+              name: 'montoPreAprobado',
+              active: true,
+              type: 'number',
             },
           ],
         },
