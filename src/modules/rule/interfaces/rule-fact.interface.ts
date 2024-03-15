@@ -1,4 +1,6 @@
-import { Document } from 'mongoose';
-export interface RuleFact extends Document {
-  readonly factId: string;
+export interface RuleFact {
+  readonly integration: string;
+  readonly variable: string;
+  readonly type: string;
 }
+

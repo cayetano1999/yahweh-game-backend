@@ -20,11 +20,14 @@ export class RuleService {
     return this.ruleModel.find().skip(skip).limit(paginationQuery.limit).exec();
   }
 
-  async add(rule: RuleDto): Promise<Rule> {
+  async add(ruleDto: RuleDto): Promise<Rule> {
+    const rule = {...ruleDto, creationDate: new Date()}; 
+   
     return this.ruleModel.create(rule);
   }
 
   async update(id: string, rule: RuleDto): Promise<Rule> {
+    
     const updatedRule = await this.ruleModel.findByIdAndUpdate(id, rule, {
       new: true,
     });

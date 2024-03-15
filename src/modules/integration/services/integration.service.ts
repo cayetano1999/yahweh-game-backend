@@ -32,22 +32,22 @@ export class IntegrationService {
             {
               name: 'debidaDiligencia',
               active: true,
-              type: 'bool',
+              type: 'boolean',
             },
             {
               name: 'tieneCuentaAhorroDigital',
               active: true,
-              type: 'bool',
+              type: 'boolean',
             },
             {
               name: 'tieneTarjetaDebitoDigital',
               active: true,
-              type: 'bool',
+              type: 'boolean',
             },
             {
               name: 'primerLogin',
               active: true,
-              type: 'bool',
+              type: 'boolean',
             },
             {
               name: 'montoCuentas',
