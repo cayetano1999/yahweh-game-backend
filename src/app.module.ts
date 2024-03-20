@@ -12,6 +12,7 @@ import httpConfig from './modules/common/http/config/htttp.config';
 import cacheConfig from './modules/common/cache/config/cache.config';
 import enviroment from './modules/common/config/config.module';
 import { RuleModule } from './modules/rule/rule.module';
+import { PromotionModule } from './modules/promotion/promotion.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,6 +35,7 @@ import { RuleModule } from './modules/rule/rule.module';
     AuthModule,
     IntegrationModule,
     RuleModule,
+    PromotionModule
   ],
   controllers: [AppController],
   providers: [AppService],
