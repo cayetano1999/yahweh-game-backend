@@ -27,7 +27,7 @@ export class RuleController {
     status: 200,
     description: 'Rule created',
   })
-  addRule(@Body() rule: Rule): Promise<Rule> {
+  addRule(@Body() rule: RuleDto): Promise<Rule> {
     return this._service.add(rule);
   }
 
@@ -42,7 +42,7 @@ export class RuleController {
     status: 404,
     description: 'Rule not found',
   })
-  update(@Param('id') id: string, @Body() rule: Rule): Promise<Rule> {
+  update(@Param('id') id: string, @Body() rule: RuleDto): Promise<Rule> {
     return this._service.update(id, rule);
   }
 

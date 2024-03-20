@@ -1,9 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger';
 import { PaginationQueryDto } from 'src/modules/common/dto/pagination-query.dto';
 import { PromotionDto } from '../dtos/promotion.dto';
 import { Promotion } from '../interfaces/promotion.interface';
 import { PromotionService } from '../services/promotion/promotion.service';
+import { EvaluationResultDto } from '../dtos/evluation-result.dto';
 
 @Controller('promotion')
 @ApiTags('promotion')
@@ -16,7 +26,9 @@ export class PromotionController {
     status: 200,
     description: 'Returned all existing Promotions paginated',
   })
-  getAllPromotions(@Query() paginationQuery: PaginationQueryDto): Promise<Promotion[]> {
+  getAllPromotions(
+    @Query() paginationQuery: PaginationQueryDto,
+  ): Promise<Promotion[]> {
     return this._service.getPaginated(paginationQuery);
   }
 
@@ -42,7 +54,10 @@ export class PromotionController {
     status: 404,
     description: 'Promotion not found',
   })
-  update(@Param('id') id: string, @Body() promotion: PromotionDto): Promise<Promotion> {
+  update(
+    @Param('id') id: string,
+    @Body() promotion: PromotionDto,
+  ): Promise<Promotion> {
     return this._service.update(id, promotion);
   }
 
@@ -58,5 +73,18 @@ export class PromotionController {
   })
   delete(@Param('id') id: string): Promise<Promotion> {
     return this._service.delete(id);
+  }
+
+  @Post(':id/evaluate')
+  @ApiOperation({ summary: 'Evaluate an parameters in an existing rule' })
+  @ApiResponse({
+    status: 200,
+    description: 'Promotion rules evaluated',
+  })
+  evaluate(
+    @Param('id') id: string,
+    @Body() parameters: PromotionDto,
+  ): Promise<EvaluationResultDto> {
+    return this._service.evaluate(id, parameters);
   }
 }

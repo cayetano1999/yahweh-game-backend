@@ -20,14 +20,18 @@ export class RuleService {
     return this.ruleModel.find().skip(skip).limit(paginationQuery.limit).exec();
   }
 
+  async getByIds(ids: string[]): Promise<Rule[]> {
+    const rules = await this.ruleModel.find({ _id: { $in: ids } });
+    return rules;
+  }
+
   async add(ruleDto: RuleDto): Promise<Rule> {
-    const rule = {...ruleDto, creationDate: new Date()}; 
-   
+    const rule = { ...ruleDto, creationDate: new Date() };
+
     return this.ruleModel.create(rule);
   }
 
   async update(id: string, rule: RuleDto): Promise<Rule> {
-    
     const updatedRule = await this.ruleModel.findByIdAndUpdate(id, rule, {
       new: true,
     });

@@ -9,6 +9,7 @@ import { RuleDto } from './dtos/rule.dto';
 
 @Module({
   imports: [DatabaseModule, LoggerModule],
+  exports: [RuleService],
   controllers: [RuleController],
   providers: [RuleService, ...ruleProvider, RuleDto, PaginationQueryDto],
 })

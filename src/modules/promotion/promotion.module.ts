@@ -6,10 +6,16 @@ import { PromotionController } from './controllers/promotion.controller';
 import { PromotionService } from './services/promotion/promotion.service';
 import { promotionProvider } from './provider/promotion.provider';
 import { PromotionDto } from './dtos/promotion.dto';
+import { RuleModule } from '../rule/rule.module';
 
 @Module({
-  imports: [DatabaseModule, LoggerModule],
+  imports: [DatabaseModule, LoggerModule, RuleModule],
   controllers: [PromotionController],
-  providers: [PromotionService, ...promotionProvider, PromotionDto, PaginationQueryDto],
+  providers: [
+    PromotionService,
+    ...promotionProvider,
+    PromotionDto,
+    PaginationQueryDto,
+  ],
 })
 export class PromotionModule {}

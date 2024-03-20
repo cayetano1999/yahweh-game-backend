@@ -8,7 +8,7 @@ export class PromotionDto {
   @ApiProperty()
   finishDate: Date;
   @ApiProperty()
-  active: Boolean
+  active: boolean;
   @ApiProperty()
   createBy: string;
   @ApiProperty()

@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { RuleFact } from '../interfaces/rule-fact.interface';
+import { TopLevelCondition } from 'json-rules-engine';
 
 export class RuleDto {
   @ApiProperty()
   name: string;
   @ApiProperty()
-  value: any;
+  condition: TopLevelCondition;
   @ApiProperty()
   active: boolean;
   @ApiProperty()
