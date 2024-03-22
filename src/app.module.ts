@@ -35,7 +35,7 @@ import { PromotionModule } from './modules/promotion/promotion.module';
     AuthModule,
     IntegrationModule,
     RuleModule,
-    PromotionModule
+    PromotionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

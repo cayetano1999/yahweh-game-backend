@@ -7,7 +7,7 @@ import { RabbitModule } from './rabbit/rabbit.module';
 
 @Module({
   imports: [DatabaseModule, HttpModuleConfig, LoggerModule, RabbitModule],
-  exports:[CommonModule]
+  exports: [CommonModule],
 })
 export class CommonModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

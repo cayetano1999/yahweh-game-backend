@@ -3,4 +3,3 @@ export interface RuleFact {
   readonly variable: string;
   readonly type: string;
 }
-

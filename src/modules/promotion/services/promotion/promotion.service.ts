@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Inject,
   Injectable,
   NotFoundException,
@@ -80,20 +82,15 @@ export class PromotionService {
         'Reglas asignadas a la promocion no encontradas.',
       );
 
-    // const facts = rules.map((x) => x.ruleFacts.map(fact=> return new Fact(fact.name, fact.value)));
+    const facts = rules.flatMap((x) => x.ruleFacts.map((x) => x.variable));
 
-    // const expectedParameters = Object.assign({}, facts);
-    // const missingProperties = this.getMissingProperties(
-    //   expectedParameters,
-    //   parameters,
-    // );
+    const missingProperties = this.getMissingProperties(facts, parameters);
 
-    // if (missingProperties.length > 0) {
-    //   throw new BadRequestException(
-    //     `Faltan propiedades en los parametros. Propiedades faltantes: ${missingProperties.join(', ')}`,
-    //   );
-    // }
-    console.log(rules);
+    if (missingProperties.length > 0) {
+      throw new BadRequestException(
+        `Faltan propiedades en los parametros. Propiedades faltantes: ${missingProperties.join(', ')}`,
+      );
+    }
     const engine = new Engine();
     const event = {
       type: 'my-event',
@@ -118,8 +115,6 @@ export class PromotionService {
     // }
 
     const result = await engine.run(parameters);
-    console.log(result);
-    console.log(parameters);
     if (result.results.length <= 0) {
       evaluationResult.success = false;
       evaluationResult.message = 'No cumple con las reglas.';
@@ -129,8 +124,8 @@ export class PromotionService {
     return evaluationResult;
   }
 
-  getMissingProperties(rule: object, parameters: object): string[] {
-    return Object.keys(rule).filter((prop) => !(prop in parameters));
+  getMissingProperties(facts: string[], parameters): string[] {
+    return facts.filter((fact) => !(fact in parameters));
   }
 
   getFactsFromParameters(obj: object): string[] {
