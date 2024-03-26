@@ -14,6 +14,9 @@ import { Rule } from 'src/modules/rule/interfaces/rule.interface';
 import { EvaluationResultDto } from '../../dtos/evluation-result.dto';
 import { Engine } from 'json-rules-engine';
 import { RuleService } from 'src/modules/rule/services/rule/rule.service';
+import { RabbitService } from 'src/modules/common/rabbit/services/rabbit/rabbit.service';
+import { RabbitListenerService } from '../../../common/rabbit/services/rabbit/rabbitListenService.service';
+import { CONTACTABILITY_EVENTS } from 'src/modules/common/events/contactability-events';
 
 @Injectable()
 export class PromotionService {
@@ -22,6 +25,8 @@ export class PromotionService {
     private promotionModel: Model<Promotion>,
     private ruleService: RuleService,
     private readonly logger: Logger,
+    private readonly rabbitService: RabbitService,
+    // private readonly rListen: RabbitListenerService
   ) {}
 
   async getPaginated(
