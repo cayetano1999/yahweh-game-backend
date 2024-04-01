@@ -27,13 +27,14 @@ export class RabbitService {
 
   constructor() {
     this.eventManager = new EventManager({
-      emitAndWaitTimeout: 10000,
+      emitAndWaitTimeout: 300000,
       url: process.env.EVENT_MNG_URL,
       logLevel: 'debug',
       logTransportMode: 'console',
       application: process.env.APP_NAME,
       ttl: +process.env.RMQ_TTL || 0,
-    });
+      USE_DEPRECATED_EMIT_AND_WAIT: true
+    } as any);
     this.tokenValidator = new TokenValidator(process.env.APP_PUBLIC_KEY);
     this.configuration();
   }
@@ -54,18 +55,20 @@ export class RabbitService {
 
 
   async listenToEvents(event: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-    
-      const eventHandler = (data: any) => {
+    return new Promise(async (resolve, reject) => {
+      console.log('Entro')
+
+      this.eventManager.on(event, async (data) => {
+        console.log('LA DATA', data)
         resolve(data); // Resolver la promesa con los datos recibidos
-      };
-    
-      this.eventManager.on(event, eventHandler);
-  
+      });
+      const evntPayload = { data: { data: {} } };
+      this.emit(evntPayload, CONTACTABILITY_EVENTS.templateList.emit);
+      console.log('AQUI');
     });
   }
 
-   emit(
+  async emit(
     payload: EmitPayloadParam,
     eventEmitter: string,
   ) {
@@ -89,8 +92,9 @@ export class RabbitService {
     payload = {
       data,
     };
-  this.eventManager.emit(eventEmitter, payload as any);
- 
-    
+    debugger;
+   return this.eventManager.emitAndWait(eventEmitter, payload as any); 
+
+
   }
 }

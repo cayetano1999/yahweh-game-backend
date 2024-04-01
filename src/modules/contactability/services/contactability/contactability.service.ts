@@ -39,12 +39,9 @@ export class ContactabilityService {
     }
  
     console.log('emitido')
-    const response = await new Promise((resolve, reject) => {
-      this.rabbitService.emit(evntPayload, CONTACTABILITY_EVENTS.templateList.emit);
-      this.rabbitService.listenToEvents(CONTACTABILITY_EVENTS.templateList.on)
-        .then(data => resolve(data))
-        .catch(error => reject(error));
-    });
+    debugger;
+    const response = await this.rabbitService.emit(evntPayload, CONTACTABILITY_EVENTS.templateList.emit);
+  
     // console.log('Evento emitido y respuesta recibida:', response);
   
     return response;
