@@ -1,7 +1,5 @@
 import {
   BadRequestException,
-  HttpException,
-  HttpStatus,
   Inject,
   Injectable,
   NotFoundException,
@@ -16,6 +14,9 @@ import { Rule } from 'src/modules/rule/interfaces/rule.interface';
 import { EvaluationResultDto } from '../../dtos/evluation-result.dto';
 import { Engine } from 'json-rules-engine';
 import { RuleService } from 'src/modules/rule/services/rule/rule.service';
+import { RabbitService } from 'src/modules/common/rabbit/services/rabbit/rabbit.service';
+import { RabbitListenerService } from '../../../common/rabbit/services/rabbit/rabbitListenService.service';
+import { CONTACTABILITY_EVENTS } from 'src/modules/common/events/contactability-events';
 
 @Injectable()
 export class PromotionService {
@@ -24,6 +25,8 @@ export class PromotionService {
     private promotionModel: Model<Promotion>,
     private ruleService: RuleService,
     private readonly logger: Logger,
+    private readonly rabbitService: RabbitService,
+    // private readonly rListen: RabbitListenerService
   ) {}
 
   async getPaginated(
@@ -82,15 +85,20 @@ export class PromotionService {
         'Reglas asignadas a la promocion no encontradas.',
       );
 
-    const facts = rules.flatMap((x) => x.ruleFacts.map((x) => x.variable));
+    // const facts = rules.map((x) => x.ruleFacts.map(fact=> return new Fact(fact.name, fact.value)));
 
-    const missingProperties = this.getMissingProperties(facts, parameters);
+    // const expectedParameters = Object.assign({}, facts);
+    // const missingProperties = this.getMissingProperties(
+    //   expectedParameters,
+    //   parameters,
+    // );
 
-    if (missingProperties.length > 0) {
-      throw new BadRequestException(
-        `Faltan propiedades en los parametros. Propiedades faltantes: ${missingProperties.join(', ')}`,
-      );
-    }
+    // if (missingProperties.length > 0) {
+    //   throw new BadRequestException(
+    //     `Faltan propiedades en los parametros. Propiedades faltantes: ${missingProperties.join(', ')}`,
+    //   );
+    // }
+    console.log(rules);
     const engine = new Engine();
     const event = {
       type: 'my-event',
@@ -115,6 +123,8 @@ export class PromotionService {
     // }
 
     const result = await engine.run(parameters);
+    console.log(result);
+    console.log(parameters);
     if (result.results.length <= 0) {
       evaluationResult.success = false;
       evaluationResult.message = 'No cumple con las reglas.';
@@ -124,8 +134,8 @@ export class PromotionService {
     return evaluationResult;
   }
 
-  getMissingProperties(facts: string[], parameters): string[] {
-    return facts.filter((fact) => !(fact in parameters));
+  getMissingProperties(rule: object, parameters: object): string[] {
+    return Object.keys(rule).filter((prop) => !(prop in parameters));
   }
 
   getFactsFromParameters(obj: object): string[] {

@@ -13,6 +13,8 @@ import cacheConfig from './modules/common/cache/config/cache.config';
 import enviroment from './modules/common/config/config.module';
 import { RuleModule } from './modules/rule/rule.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
+import { ContactabilityModule } from './modules/contactability/contactability.module';
+import { ActionsModule } from './modules/actions/actions.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,6 +38,8 @@ import { PromotionModule } from './modules/promotion/promotion.module';
     IntegrationModule,
     RuleModule,
     PromotionModule,
+    ContactabilityModule,
+    ActionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

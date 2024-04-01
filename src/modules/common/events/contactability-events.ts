@@ -1,0 +1,6 @@
+export const CONTACTABILITY_EVENTS = {
+    templateList: {
+        emit: 'CONTACTABILITY_GET_TEMPLATE_LIST',
+        on: 'CONTACTABILITY_GET_TEMPLATE_LIST_RESPONSE'
+    }
+}
