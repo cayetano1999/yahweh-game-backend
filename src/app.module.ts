@@ -39,7 +39,7 @@ import { ActionsModule } from './modules/actions/actions.module';
     RuleModule,
     PromotionModule,
     ContactabilityModule,
-    ActionsModule
+    ActionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
