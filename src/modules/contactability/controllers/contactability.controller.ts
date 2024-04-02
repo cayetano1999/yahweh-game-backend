@@ -25,22 +25,13 @@ export class ContactabilityController {
     status: 200,
     description: 'Returned all notification templates',
   })
-  async getAllPromotions(
+  async getAllTemplates(
   ): Promise<any> {
-    const result =  await this._service.getPaginated();
-    console.log('result', result)
-    return result;
+    const data = await this._service.getTemplates();
+    return data
+
   }
 
-  // @Get('get-templates-by-id')
-  // get(
-  //   @Param('id') id: string,
-  // ): Promise<any> {
-  //   // return this._service.update(id, promotion);
-  //   return this._service.getPaginated();
-  // }
-
-  //No es necesario
   
   
 }
