@@ -8,14 +8,16 @@ import { RabbitService } from '../common/rabbit/services/rabbit/rabbit.service';
 import { RabbitListenerService } from '../common/rabbit/services/rabbit/rabbitListenService.service';
 import { ContactabilityService } from './services/contactability/contactability.service';
 import { ContactabilityController } from './controllers/contactability.controller';
+import { HttpService, HttpModule } from '@nestjs/axios';
 
 
 @Module({
-  imports: [DatabaseModule, LoggerModule],
+  imports: [DatabaseModule, LoggerModule, HttpModule],
   controllers: [ContactabilityController],
   providers: [
     ContactabilityService,
     RabbitService,
+    
   ],
 })
 export class ContactabilityModule {}
