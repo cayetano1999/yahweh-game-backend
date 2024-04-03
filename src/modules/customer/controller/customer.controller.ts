@@ -1,9 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Param, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CustomerService } from '../services/customer.service';
-import { PromotionDto } from 'src/modules/promotion/dtos/promotion.dto';
 import { LandingDto } from '../dtos/landing.dto';
-import { CustomerPromotion } from '../interfaces/customer-promotion.interface';
 import { CustomerPromotionDto } from '../dtos/customer-promotion.dto';
 
 @Controller('customer')
