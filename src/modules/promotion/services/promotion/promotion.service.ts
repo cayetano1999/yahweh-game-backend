@@ -134,8 +134,28 @@ export class PromotionService {
     return evaluationResult;
   }
 
+<<<<<<< Updated upstream
   getMissingProperties(rule: object, parameters: object): string[] {
     return Object.keys(rule).filter((prop) => !(prop in parameters));
+=======
+  async getActivePromotions(): Promise<Promotion[]> {
+    const promotions = this.promotionModel
+      .find({
+        active: true,
+        $or: [{ finishDate: { $gte: new Date() } }, { finishDate: null }],
+      })
+      .exec();
+    return promotions;
+  }
+
+  async exists(id: string): Promise<boolean> {
+    const exists = await this.promotionModel.countDocuments({_id: id});
+    return exists > 0;
+  }
+
+  getMissingProperties(facts: string[], parameters): string[] {
+    return facts.filter((fact) => !(fact in parameters));
+>>>>>>> Stashed changes
   }
 
   getFactsFromParameters(obj: object): string[] {

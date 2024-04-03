@@ -56,15 +56,11 @@ export class RabbitService {
 
   async listenToEvents(event: string): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      console.log('Entro')
-
       this.eventManager.on(event, async (data) => {
-        console.log('LA DATA', data)
         resolve(data); // Resolver la promesa con los datos recibidos
       });
       const evntPayload = { data: { data: {} } };
       this.emit(evntPayload, CONTACTABILITY_EVENTS.templateList.emit);
-      console.log('AQUI');
     });
   }
 
