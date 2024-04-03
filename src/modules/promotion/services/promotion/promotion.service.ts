@@ -119,6 +119,11 @@ export class PromotionService {
     return evaluationResult;
   }
 
+  async exists(id: string): Promise<boolean> {
+    const exists = await this.promotionModel.countDocuments({_id: id});
+    return exists > 0;
+  }
+
   async getActivePromotions(): Promise<Promotion[]> {
     const promotions = this.promotionModel
       .find({

@@ -7,8 +7,6 @@ export class RabbitListenerService {
 
   async listenToEvents(): Promise<void> {
     await this.eventManager.on('CONTACTABILITY_GET_TEMPLATE_RESPONSE', async (data) => {
-      // Manejar el evento recibido aquí
-      console.log('Evento recibido:', data);
     });
   }
 }

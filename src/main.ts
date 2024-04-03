@@ -6,6 +6,7 @@ import { Logger } from './modules/common/logger/services/logger/logger.service';
 import { setupSwagger } from './modules/common/swagger/swagger.module';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { AuthService } from './modules/auth/services/auth.service';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -32,6 +33,7 @@ async function bootstrap() {
   }
   const appPort = configService.get<number>('PORT');
   app.use(helmet());
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(appPort);
 }
 bootstrap();

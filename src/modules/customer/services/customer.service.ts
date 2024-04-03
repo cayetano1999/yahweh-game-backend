@@ -1,14 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { PromotionService } from 'src/modules/promotion/services/promotion/promotion.service';
-import { Promotion } from '../../promotion/interfaces/promotion.interface';
 import { EvaluationResultDto } from 'src/modules/promotion/dtos/evluation-result.dto';
 import { ContactabilityService } from 'src/modules/contactability/services/contactability/contactability.service';
 import { ActionsService } from 'src/modules/actions/services/actions/actions.service';
 import { LandingDto } from '../dtos/landing.dto';
+import { CustomerActionEnum } from '../enums/action.enum';
+import { CustomerPromotionConstant } from '../constants';
+import { CustomerPromotion } from '../interfaces/customer-promotion.interface';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class CustomerService {
-  constructor(private readonly _promotionService: PromotionService,
+  constructor(
+    @Inject(CustomerPromotionConstant.ProviderName)
+    private customerPromotion: Model<CustomerPromotion>,
+    private readonly _promotionService: PromotionService,
     private readonly _contactabilityService: ContactabilityService,
     private readonly _actionsService: ActionsService,
   ) { }
@@ -32,7 +38,6 @@ export class CustomerService {
       const landings = validPromotions
         .filter((promotion) => ids.includes(promotion.id))
         .flatMap((promotion) => promotion.promotionDetails.filter(x => x.type === 'LANDING'));
-      
       const landingIds = [];
       const actionsIds = [];
 
@@ -41,18 +46,18 @@ export class CustomerService {
         actionsIds.push(item.actionValue);
       }
 
-      
+
       ///Busca los actions
       const actions = await this._actionsService.getMultiple(actionsIds);
 
-      ///Obtiene los templates llenos
       if (landingIds == null || landingIds.length <= 0) {
         return [];
       }
 
+      ///Obtiene los templates llenos
       const templateResult = await this._contactabilityService.getFilledTemplates(landingIds, parameters);
       const data = templateResult.data.content.map((item: any) => {
-        const landing = landings.find((landing) => landing.value == item._id); 
+        const landing = landings.find((landing) => landing.value == item._id);
         const specificAction = actions.find((action) => action._id == landing.actionValue);
         return {
           ...landing,
@@ -65,6 +70,35 @@ export class CustomerService {
       });
 
       return data;
+    } catch (error) {
+      throw error;
+    }
+
+  }
+
+  async RegisterAction(customerId: string, promotionId: string, action: CustomerActionEnum) {
+    try {
+      const promotionExists = await this._promotionService.exists(promotionId);
+      if (!promotionExists)
+        throw new NotFoundException('Promotion no encontrada');
+
+      let customerPromotion = await this.customerPromotion.findOne({ promotionId: promotionId, customerId: customerId }).exec();
+      if (customerPromotion == null) {
+        await this.customerPromotion.create({
+          customerId: customerId,
+          promotionId: promotionId,
+          displayedCount: 1,
+          customerActions: [{ action: action, date: new Date() }],
+        });
+        return;
+      }
+
+      if (action == CustomerActionEnum.View) {
+        customerPromotion.displayedCount++;
+      }
+      customerPromotion.customerActions.push({ action: action, date: new Date() });
+      await this.customerPromotion.findByIdAndUpdate(customerPromotion._id, customerPromotion);
+      return;
     } catch (error) {
       throw error;
     }
