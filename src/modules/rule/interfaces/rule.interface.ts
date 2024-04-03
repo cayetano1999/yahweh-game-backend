@@ -1,5 +1,6 @@
 import { TopLevelCondition } from 'json-rules-engine';
-import { Document, Schema } from 'mongoose';
+import { Document } from 'mongoose';
+import { RuleFact } from './rule-fact.interface';
 
 export interface Rule extends Document {
   readonly name: string;
@@ -9,5 +10,5 @@ export interface Rule extends Document {
   readonly creationDate: Date;
   readonly createBy: string;
   readonly updateBy: string;
-  readonly ruleFacts: { type: Schema.Types.Mixed };
+  readonly ruleFacts: RuleFact[];
 }

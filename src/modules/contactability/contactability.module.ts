@@ -13,6 +13,7 @@ import { HttpService, HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [DatabaseModule, LoggerModule, HttpModule],
+  exports: [ContactabilityService],
   controllers: [ContactabilityController],
   providers: [
     ContactabilityService,

@@ -14,7 +14,9 @@ import enviroment from './modules/common/config/config.module';
 import { RuleModule } from './modules/rule/rule.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
 import { ContactabilityModule } from './modules/contactability/contactability.module';
+import { CustomerModule } from './modules/customer/customer.module';
 import { ActionsModule } from './modules/actions/actions.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -39,6 +41,7 @@ import { ActionsModule } from './modules/actions/actions.module';
     RuleModule,
     PromotionModule,
     ContactabilityModule,
+    CustomerModule,
     ActionsModule,
   ],
   controllers: [AppController],

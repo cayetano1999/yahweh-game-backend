@@ -2,29 +2,35 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
+import { ContactabilityResponse } from '../../dtos/contactability-response.dto';
 
 const routes = {
   root: process.env.CONTATABILITY_URL_API,
-  getAllTemplates: () => `https://contactability-service-programa-digitalizacion-dev.apps.x966bdcl.eastus2.aroapp.io/api/template?channelType=10`
+  getAllTemplates: () => `https://contactability-service-programa-digitalizacion-dev.apps.x966bdcl.eastus2.aroapp.io/api/template?channelType=10`,
+  byId: (ids: string[]) => `${routes.root}/api/template?ids=${ids.join(',')}`
 }
 @Injectable()
 export class ContactabilityService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly httpService: HttpService) { }
 
-  getTemplates(): Promise<any> {
+  async getTemplates(): Promise<any> {
     const url = routes.getAllTemplates();
-    return new Promise((resolve, rejects) => {
-      this.httpService.get(url).subscribe({
-        next: (value) => {
-          resolve(value.data)
-        },
-        error: (err) => {
-          rejects(err)
-        },
-      })
-    })
+    return this.httpService.axiosRef.get<any>(url);
+  }
+
+  async getFilledTemplates(ids: string[], payload: any) {
+    const url = routes.byId(ids);
+    const params = this.convertToTemplateParams(payload);
+    return this.httpService.axiosRef.get(url, { data: params });
+  }
+
+  convertToTemplateParams(payload) {
+    const newObject = {};
+    for (let property in payload) {
+      if (payload.hasOwnProperty(property)) {
+        newObject['@' + property] = payload[property];
+      }
+    }
+    return newObject;
   }
 }
-
-
-

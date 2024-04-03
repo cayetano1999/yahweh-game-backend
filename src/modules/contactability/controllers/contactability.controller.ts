@@ -28,10 +28,6 @@ export class ContactabilityController {
   async getAllTemplates(
   ): Promise<any> {
     const data = await this._service.getTemplates();
-    return data
-
+    return data.data;
   }
-
-  
-  
 }

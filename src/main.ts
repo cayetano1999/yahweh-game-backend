@@ -1,4 +1,3 @@
-import { HttpExceptionFilter } from './modules/common/filters/exception.filter';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
@@ -15,7 +14,6 @@ async function bootstrap() {
   if (configService.get('ENABLE_DOCUMENTATION') === 'true') {
     setupSwagger(app);
   }
-  app.useGlobalFilters(new HttpExceptionFilter());
   if (configService.get('ENABLE_CORS') === 'true') {
     const ORIGINS: string[] = configService.get<string>('ORIGIN').split(',');
     const CORS_METHODS: string[] = configService

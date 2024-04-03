@@ -30,6 +30,12 @@ export class ActionsService {
       .exec();
   }
 
+  async getMultiple(
+    ids: string[],
+  ): Promise<Actions[]> {
+    return this.actionsModel.find({ _id: { $in: ids } }).exec();
+  }
+
   async add(promotion: ActionsDto): Promise<Actions> {
     const rule = { ...promotion, creationDate: new Date() };
 

@@ -12,10 +12,11 @@ import { RabbitListenerService } from '../common/rabbit/services/rabbit/rabbitLi
 
 @Module({
   imports: [DatabaseModule, LoggerModule, RuleModule],
+  exports: [PromotionService],
   controllers: [PromotionController],
   providers: [
-    PromotionService,
     ...promotionProvider,
+    PromotionService,
     PromotionDto,
     PaginationQueryDto,
     RabbitService,

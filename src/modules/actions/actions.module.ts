@@ -11,6 +11,7 @@ import { acctionsProvider } from './provider/actions.provider';
 
 @Module({
   imports: [DatabaseModule, LoggerModule, RuleModule],
+  exports: [ActionsService],
   controllers: [ActionsController],
   providers: [
     ActionsService,
