@@ -26,8 +26,7 @@ export class PromotionService {
     private ruleService: RuleService,
     private readonly logger: Logger,
     private readonly rabbitService: RabbitService,
-    // private readonly rListen: RabbitListenerService
-  ) {}
+  ) { }
 
   async getPaginated(
     paginationQuery: PaginationQueryDto,
@@ -85,20 +84,15 @@ export class PromotionService {
         'Reglas asignadas a la promocion no encontradas.',
       );
 
-    // const facts = rules.map((x) => x.ruleFacts.map(fact=> return new Fact(fact.name, fact.value)));
+    const facts = rules.flatMap((x) => x.ruleFacts.map((x) => x.variable));
 
-    // const expectedParameters = Object.assign({}, facts);
-    // const missingProperties = this.getMissingProperties(
-    //   expectedParameters,
-    //   parameters,
-    // );
+    const missingProperties = this.getMissingProperties(facts, parameters);
 
-    // if (missingProperties.length > 0) {
-    //   throw new BadRequestException(
-    //     `Faltan propiedades en los parametros. Propiedades faltantes: ${missingProperties.join(', ')}`,
-    //   );
-    // }
-    console.log(rules);
+    if (missingProperties.length > 0) {
+      throw new BadRequestException(
+        `Faltan propiedades en los parametros. Propiedades faltantes: ${missingProperties.join(', ')}`,
+      );
+    }
     const engine = new Engine();
     const event = {
       type: 'my-event',
@@ -114,17 +108,8 @@ export class PromotionService {
         event: event,
       });
     }
-    // const parametersAsFacts = this.getFactsFromParameters(parameters);
-    // for (const fact of parametersAsFacts) {
-    //   const [propertyName, propertyValue] = fact.split(': ');
-    //   console.log(fact);
-    //   console.log(propertyName, propertyValue);
-    //   engine.addFact(propertyName, propertyValue);
-    // }
 
     const result = await engine.run(parameters);
-    console.log(result);
-    console.log(parameters);
     if (result.results.length <= 0) {
       evaluationResult.success = false;
       evaluationResult.message = 'No cumple con las reglas.';
@@ -134,10 +119,11 @@ export class PromotionService {
     return evaluationResult;
   }
 
-<<<<<<< Updated upstream
-  getMissingProperties(rule: object, parameters: object): string[] {
-    return Object.keys(rule).filter((prop) => !(prop in parameters));
-=======
+  async exists(id: string): Promise<boolean> {
+    const exists = await this.promotionModel.countDocuments({_id: id});
+    return exists > 0;
+  }
+
   async getActivePromotions(): Promise<Promotion[]> {
     const promotions = this.promotionModel
       .find({
@@ -148,14 +134,8 @@ export class PromotionService {
     return promotions;
   }
 
-  async exists(id: string): Promise<boolean> {
-    const exists = await this.promotionModel.countDocuments({_id: id});
-    return exists > 0;
-  }
-
   getMissingProperties(facts: string[], parameters): string[] {
     return facts.filter((fact) => !(fact in parameters));
->>>>>>> Stashed changes
   }
 
   getFactsFromParameters(obj: object): string[] {
