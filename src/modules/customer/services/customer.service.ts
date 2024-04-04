@@ -37,7 +37,14 @@ export class CustomerService {
       ///Filtra las promociones que tienen landing
       const landings = validPromotions
         .filter((promotion) => ids.includes(promotion.id))
-        .flatMap((promotion) => promotion.promotionDetails.filter(x => x.type === 'LANDING'));
+        .flatMap((promotion) => promotion.promotionDetails
+          .filter(x => x.type === 'LANDING')
+          .map(item => {return {
+            ...item,
+            promotionName: promotion.name,
+            promotionId: promotion.id,
+          }})
+        );
       const landingIds = [];
       const actionsIds = [];
 
