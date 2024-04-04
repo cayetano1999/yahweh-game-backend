@@ -23,7 +23,7 @@ export class CustomerController {
     return this._service.GetValidPromotionsLandings(id, payload);
   }
 
-  @Put()
+  @Post("action")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Register interaction between customer and promotions' })
   @ApiResponse({
