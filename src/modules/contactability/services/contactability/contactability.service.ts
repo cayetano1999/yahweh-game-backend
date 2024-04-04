@@ -7,7 +7,7 @@ import { ContactabilityResponse } from '../../dtos/contactability-response.dto';
 const routes = {
   root: process.env.CONTATABILITY_URL_API,
   getAllTemplates: () => `https://contactability-service-programa-digitalizacion-dev.apps.x966bdcl.eastus2.aroapp.io/api/template?channelType=10`,
-  byId: (ids: string[]) => `${routes.root}/api/template?ids=${ids.join(',')}`
+  byId: (ids: string[]) => `${routes.root}/api/template?${ids.map(id => `ids=${id}`).join('&')}`
 }
 @Injectable()
 export class ContactabilityService {
