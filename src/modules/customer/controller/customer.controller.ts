@@ -9,6 +9,23 @@ import { CustomerPromotionDto } from '../dtos/customer-promotion.dto';
 export class CustomerController {
   constructor(private readonly _service: CustomerService) { }
 
+
+
+  @Post("action")
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Register interaction between customer and promotions' })
+  @ApiResponse({
+    status: 200,
+    description: 'Action registered successfully',
+  })
+  saveAction(
+    @Body() payload: CustomerPromotionDto,
+  ) {
+    const {promotionId, customerId, action} = payload;
+    return this._service.RegisterAction(customerId, promotionId, action);
+  }
+
+
   @Post(":id")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Get All Promotions for a customer' })
@@ -21,19 +38,5 @@ export class CustomerController {
     @Body() payload: any,
   ): Promise<LandingDto[]> {
     return this._service.GetValidPromotionsLandings(id, payload);
-  }
-
-  @Put("action")
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Register interaction between customer and promotions' })
-  @ApiResponse({
-    status: 200,
-    description: 'Action registered successfully',
-  })
-  saveAction(
-    @Body() payload: CustomerPromotionDto,
-  ) {
-    const {promotionId, customerId, action} = payload;
-    return this._service.RegisterAction(customerId, promotionId, action);
   }
 }
