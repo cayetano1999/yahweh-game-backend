@@ -54,6 +54,16 @@ export class IntegrationService {
               active: true,
               type: 'number',
             },
+            {
+              name: 'tieneCertificado',
+              active: true,
+              type: 'number',
+            },
+            {
+              name: 'tieneCertificadoDigital',
+              active: true,
+              type: 'number',
+            },
           ],
         },
         {
@@ -82,6 +92,38 @@ export class IntegrationService {
               name: 'montoPreAprobado',
               active: true,
               type: 'number',
+            },
+          ],
+        },
+        {
+          name: 'Accion promociones',
+          description: 'Integracion que incluye informacion de interaccion con las promociones',
+          url: '',
+          facts: [
+            {
+              name: 'descartada',
+              active: true,
+              type: 'boolean',
+            }, 
+            {
+              name: 'fechaDescarte',
+              active: true,
+              type: 'date',
+            },
+            {
+              name: 'visualizaciones',
+              active: true,
+              type: 'number',
+            },
+            {
+              name: 'verDespues',
+              active: true,
+              type: 'boolean',
+            },
+            {
+              name: 'fechaVerDespues',
+              active: true,
+              type: 'date',
             },
           ],
         },
