@@ -7,6 +7,7 @@ import { LoggerModule } from '../common/logger/logger.module';
 
 @Module({
   imports: [DatabaseModule, LoggerModule],
+  exports: [IntegrationService],
   controllers: [IntegrationController],
   providers: [IntegrationService, ...integrationProviders],
 })
