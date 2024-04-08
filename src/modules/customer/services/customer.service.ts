@@ -20,22 +20,47 @@ export class CustomerService {
   ) { }
 
   async GetValidPromotionsLandings(id: string, parameters: any): Promise<LandingDto[]> {
-    /// Busca todas las prociones activas
+    /// Busca todas las promociones activas
     const validPromotions = await this._promotionService.getActivePromotions();
     const evaluations: Promise<EvaluationResultDto>[] = [];
 
+    const customerPromotions = await this.customerPromotion.find({ customerId: id, promotionId: { $in: validPromotions.map(x => x.id) } }).exec();
+
     ///Ejecuta las evaluaciones a cada promocion sin esperar el resultado
     for (const promotion of validPromotions) {
-      evaluations.push(this._promotionService.evaluate(promotion.id, parameters));
+      //Busca los parametros de accion realizadas por el cliente con la promocion
+      const customerPromo = customerPromotions.find(x => x.promotionId == promotion.id);
+      const displayedCount = customerPromo ? customerPromo.displayedCount : 0;
+      let sortedActions = customerPromo?.customerActions;
+
+      if(customerPromo){
+        sortedActions.sort((a, b) => a.date.getTime() - b.date.getTime());
+      }
+
+      const dismissed = customerPromo ? sortedActions.find(x => x.action == CustomerActionEnum.Dismissed) : null;
+      const viewLater = customerPromo ? sortedActions.find(x => x.action == CustomerActionEnum.ViewLater) : null;
+      const completed = customerPromo ? sortedActions.find(x => x.action == CustomerActionEnum.Completed) : null;
+
+      const params = {
+        ...parameters,
+        visualizaciones: displayedCount,
+        descartada: !!dismissed,
+        fechaDescarte: dismissed ? dismissed.date : null,
+        verDespues: !!viewLater,
+        fechaVerDespues: viewLater ? viewLater.date : null,
+        completada: !!completed,
+        fechaCompletada: completed ? completed.date : null,
+      }
+      evaluations.push(this._promotionService.evaluate(promotion.id, params));
     }
 
     ///Espera a que todas las evaluaciones terminen
     const results = await Promise.all(evaluations);
-    const ids = results.filter((result) => result.success).map((result) => result.promotionId);
+    const customerValidpromotionIds = results.filter((result) => result.success).map((result) => result.promotionId);
 
     ///Filtra las promociones que tienen landing
     const landings = validPromotions
-      .filter((promotion) => ids.includes(promotion.id))
+      .filter((promotion) => customerValidpromotionIds.includes(promotion.id))
       .flatMap((promotion) => promotion.promotionDetails
         .filter(x => x.type === 'LANDING')
         .map(item => {
@@ -54,7 +79,24 @@ export class CustomerService {
       actionsIds.push(item.actionValue);
     }
 
-    ///Todo: Aumentar visualizacio de promocion de manera automatica
+    ///registra/actualiza CustomerPromotion para llevar el conteo de visualiaciones y las acciones realizadas
+    const customerPromoPromises = [];
+
+    for (const promo of customerValidpromotionIds) {
+      const customerPromotion = customerPromotions.find(x => x.promotionId == promo);
+      if (customerPromotion) {
+        customerPromotion.displayedCount++;
+        customerPromoPromises.push(this.customerPromotion.findByIdAndUpdate(customerPromotion._id, customerPromotion));
+        continue;
+      }
+      customerPromoPromises.push(this.customerPromotion.create({
+        customerId: id,
+        promotionId: promo,
+        displayedCount: 1,
+        customerActions: [],
+      }));
+    }
+    await Promise.all(customerPromoPromises);
 
     ///Busca los actions redirect
     const actions = await this._actionsService.getMultiple(actionsIds);
@@ -101,9 +143,9 @@ export class CustomerService {
       customerPromotion.customerActions.push({ action: action, date: new Date() });
       await this.customerPromotion.findByIdAndUpdate(customerPromotion._id, customerPromotion);
     } catch (error) {
-      if(error.kind === 'ObjectId')
+      if (error.kind === 'ObjectId')
         throw new BadRequestException('Id de promocion inválido');
-      else 
+      else
         throw error;
     }
   }

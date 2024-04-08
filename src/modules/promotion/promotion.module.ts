@@ -8,10 +8,10 @@ import { promotionProvider } from './provider/promotion.provider';
 import { PromotionDto } from './dtos/promotion.dto';
 import { RuleModule } from '../rule/rule.module';
 import { RabbitService } from '../common/rabbit/services/rabbit/rabbit.service';
-import { RabbitListenerService } from '../common/rabbit/services/rabbit/rabbitListenService.service';
+import { IntegrationModule } from '../integration/integration.module';
 
 @Module({
-  imports: [DatabaseModule, LoggerModule, RuleModule],
+  imports: [DatabaseModule, LoggerModule, RuleModule, IntegrationModule],
   exports: [PromotionService],
   controllers: [PromotionController],
   providers: [

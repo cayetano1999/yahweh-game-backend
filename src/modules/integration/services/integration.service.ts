@@ -10,7 +10,7 @@ export class IntegrationService {
     @Inject(IntegrationConstants.ProviderName)
     private integrationModel: Model<Integration>,
     private readonly logger: Logger,
-  ) {}
+  ) { }
 
   async configure(): Promise<any> {
     try {
@@ -23,110 +23,10 @@ export class IntegrationService {
       await this.integrationModel.deleteMany({});
 
       const defaultIntegrations = [
-        {
-          name: 'APP Movil',
-          description:
-            'Integracion que incluye propiedades de la aplicacion movil',
-          url: '',
-          facts: [
-            {
-              name: 'debidaDiligencia',
-              active: true,
-              type: 'boolean',
-            },
-            {
-              name: 'tieneCuentaAhorroDigital',
-              active: true,
-              type: 'boolean',
-            },
-            {
-              name: 'tieneTarjetaDebitoDigital',
-              active: true,
-              type: 'boolean',
-            },
-            {
-              name: 'primerLogin',
-              active: true,
-              type: 'boolean',
-            },
-            {
-              name: 'montoCuentas',
-              active: true,
-              type: 'number',
-            },
-            {
-              name: 'tieneCertificado',
-              active: true,
-              type: 'number',
-            },
-            {
-              name: 'tieneCertificadoDigital',
-              active: true,
-              type: 'number',
-            },
-          ],
-        },
-        {
-          name: 'SOMOS',
-          description: 'Integracion que incluye propiedades de somos',
-          url: '',
-          facts: [
-            {
-              name: 'nivel',
-              active: true,
-              type: 'number',
-            },
-          ],
-        },
-        {
-          name: 'CRM',
-          description: 'Integracion que incluye propiedades de CRM',
-          url: '',
-          facts: [
-            {
-              name: 'preAprobado',
-              active: true,
-              type: 'boolean',
-            },
-            {
-              name: 'montoPreAprobado',
-              active: true,
-              type: 'number',
-            },
-          ],
-        },
-        {
-          name: 'Accion promociones',
-          description: 'Integracion que incluye informacion de interaccion con las promociones',
-          url: '',
-          facts: [
-            {
-              name: 'descartada',
-              active: true,
-              type: 'boolean',
-            }, 
-            {
-              name: 'fechaDescarte',
-              active: true,
-              type: 'date',
-            },
-            {
-              name: 'visualizaciones',
-              active: true,
-              type: 'number',
-            },
-            {
-              name: 'verDespues',
-              active: true,
-              type: 'boolean',
-            },
-            {
-              name: 'fechaVerDespues',
-              active: true,
-              type: 'date',
-            },
-          ],
-        },
+        this.getAppMovilIntegraion(),
+        this.getSomosIntegration(),
+        this.getCrmIntegration(),
+        this.getSystemIntegration(),
       ];
 
       const createdIntegrations =
@@ -149,5 +49,134 @@ export class IntegrationService {
 
   getAll(): Promise<Integration[]> {
     return this.integrationModel.find().exec();
+  }
+
+
+  getAppMovilIntegraion() {
+    return {
+      name: 'APP Movil',
+      description:
+        'Integracion que incluye propiedades de la aplicacion movil',
+      url: '',
+      facts: [
+        {
+          name: 'debidaDiligencia',
+          active: true,
+          type: 'boolean',
+        },
+        {
+          name: 'tieneCuentaAhorroDigital',
+          active: true,
+          type: 'boolean',
+        },
+        {
+          name: 'tieneTarjetaDebitoDigital',
+          active: true,
+          type: 'boolean',
+        },
+        {
+          name: 'primerLogin',
+          active: true,
+          type: 'boolean',
+        },
+        {
+          name: 'montoCuentas',
+          active: true,
+          type: 'number',
+        },
+        {
+          name: 'tieneCertificado',
+          active: true,
+          type: 'number',
+        },
+        {
+          name: 'tieneCertificadoDigital',
+          active: true,
+          type: 'number',
+        },
+        {
+          name: 'AppVersion',
+          active: true,
+          type: 'string',
+        },
+      ],
+    }
+  }
+  getSomosIntegration() {
+    return {
+      name: 'SOMOS',
+      description: 'Integracion que incluye propiedades de somos',
+      url: '',
+      facts: [
+        {
+          name: 'nivel',
+          active: true,
+          type: 'number',
+        },
+      ],
+    };
+  }
+  getCrmIntegration() {
+    return {
+      name: 'CRM',
+      description: 'Integracion que incluye propiedades de CRM',
+      url: '',
+      facts: [
+        {
+          name: 'preAprobado',
+          active: true,
+          type: 'boolean',
+        },
+        {
+          name: 'montoPreAprobado',
+          active: true,
+          type: 'number',
+        },
+      ],
+    };
+  }
+  getSystemIntegration() {
+    return {
+      name: 'Accion promociones',
+      description: 'Integracion que incluye informacion de interaccion con las promociones',
+      url: '',
+      facts: [
+        {
+          name: 'descartada',
+          active: true,
+          type: 'boolean',
+        },
+        {
+          name: 'fechaDescarte',
+          active: true,
+          type: 'date',
+        },
+        {
+          name: 'visualizaciones',
+          active: true,
+          type: 'number',
+        },
+        {
+          name: 'verDespues',
+          active: true,
+          type: 'boolean',
+        },
+        {
+          name: 'fechaVerDespues',
+          active: true,
+          type: 'date',
+        },
+        {
+          name: 'completada',
+          active: true,
+          type: 'boolean',
+        },
+        {
+          name: 'fechaCompletada',
+          active: true,
+          type: 'date',
+        },
+      ],
+    };
   }
 }

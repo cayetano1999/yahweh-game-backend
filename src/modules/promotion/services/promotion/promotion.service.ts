@@ -12,11 +12,8 @@ import { Promotion } from '../../interfaces/promotion.interface';
 import { PromotionDto } from '../../dtos/promotion.dto';
 import { Rule } from 'src/modules/rule/interfaces/rule.interface';
 import { EvaluationResultDto } from '../../dtos/evluation-result.dto';
-import { Engine } from 'json-rules-engine';
 import { RuleService } from 'src/modules/rule/services/rule/rule.service';
-import { RabbitService } from 'src/modules/common/rabbit/services/rabbit/rabbit.service';
-import { RabbitListenerService } from '../../../common/rabbit/services/rabbit/rabbitListenService.service';
-import { CONTACTABILITY_EVENTS } from 'src/modules/common/events/contactability-events';
+import { EngineHelper } from 'src/modules/common/helper/engine.helper';
 
 @Injectable()
 export class PromotionService {
@@ -25,7 +22,6 @@ export class PromotionService {
     private promotionModel: Model<Promotion>,
     private ruleService: RuleService,
     private readonly logger: Logger,
-    private readonly rabbitService: RabbitService,
   ) { }
 
   async getPaginated(
@@ -70,8 +66,16 @@ export class PromotionService {
   }
 
   async evaluate(id: string, parameters: any): Promise<EvaluationResultDto> {
+
     const evaluationResult = new EvaluationResultDto();
     evaluationResult.promotionId = id;
+
+    this.logger.log({
+      requestId: '',
+      serviceName: 'micro-promotions',
+      description:
+        `Iniciada evaluacion de reglas para promocion ${id}.`,
+    });
 
     const promotion: Promotion = await this.promotionModel.findById(id);
     if (!promotion) throw new NotFoundException('Promocion no encontrada.');
@@ -93,13 +97,10 @@ export class PromotionService {
         `Faltan propiedades en los parametros. Propiedades faltantes: ${missingProperties.join(', ')}`,
       );
     }
-    const engine = new Engine();
-    const event = {
-      type: 'my-event',
-      params: {
-        customProperty: 'customValue',
-      },
-    };
+
+    const helper = new EngineHelper();
+    const engine = helper.getEngine();
+    const event = helper.getAutoEvent();
 
     for (const rule of rules) {
       engine.addRule({
@@ -110,9 +111,17 @@ export class PromotionService {
     }
 
     const result = await engine.run(parameters);
-    if (result.results.length <= 0) {
+    if (result.failureResults.length >= 1) {
       evaluationResult.success = false;
       evaluationResult.message = 'No cumple con las reglas.';
+      for (const failure of result.failureResults){
+        this.logger.log({
+          requestId: '',
+          serviceName: 'micro-promotions',
+          description:
+            `Regla evaluada con resultado negativo. Regla: ${JSON.stringify(failure)}.`,
+        });
+      }
       return evaluationResult;
     }
 
@@ -120,15 +129,20 @@ export class PromotionService {
   }
 
   async exists(id: string): Promise<boolean> {
-    const exists = await this.promotionModel.countDocuments({_id: id});
+    const exists = await this.promotionModel.countDocuments({ _id: id });
     return exists > 0;
   }
 
   async getActivePromotions(): Promise<Promotion[]> {
+    const currentDate = new Date();
     const promotions = this.promotionModel
       .find({
         active: true,
-        $or: [{ finishDate: { $gte: new Date() } }, { finishDate: null }],
+        $and: [{
+          $or: [{ initialDate: { $lte: currentDate } }, { finishDate: null }],
+        }, {
+          $or: [{ finishDate: { $gte: currentDate } }, { finishDate: null }],
+        }]
       })
       .exec();
     return promotions;
