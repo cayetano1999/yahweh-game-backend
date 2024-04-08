@@ -26,11 +26,10 @@ export class EngineHelper {
 
     private afterDays(factValue: Date, jsonValue: number) {
         if (factValue == null || jsonValue == null) return false;
-        const miliseconds =  new Date().getTime() - factValue.getTime();
+        const miliseconds = new Date().getTime() - factValue.getTime();
         const daysoOfDifference = Math.floor(miliseconds / (1000 * 60 * 60 * 24));
         return daysoOfDifference >= jsonValue;
     }
-
 
     getEngine() {
         return this.engine;
