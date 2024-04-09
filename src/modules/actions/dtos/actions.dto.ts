@@ -9,4 +9,6 @@ export class ActionsDto {
   module: string;
   @ApiProperty()
   requeredState: boolean;
+  @ApiProperty()
+  btnConfirmText: string;
 }

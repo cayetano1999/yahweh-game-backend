@@ -5,6 +5,6 @@ export const ActionsSchema = new mongoose.Schema({
   pageName: String,
   url: String,
   module: String,
-  requeredState: Boolean
+  requeredState: Boolean,
 
 });
