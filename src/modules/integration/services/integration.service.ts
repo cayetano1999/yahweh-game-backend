@@ -95,7 +95,7 @@ export class IntegrationService {
           type: 'number',
         },
         {
-          name: 'AppVersion',
+          name: 'appVersion',
           active: true,
           type: 'string',
         },
