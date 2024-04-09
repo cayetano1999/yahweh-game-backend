@@ -75,6 +75,11 @@ export class IntegrationService {
           type: 'boolean',
         },
         {
+          name: 'tienePrestamoConsumo',
+          active: true,
+          type: 'boolean',
+        },
+        {
           name: 'primerLogin',
           active: true,
           type: 'boolean',
