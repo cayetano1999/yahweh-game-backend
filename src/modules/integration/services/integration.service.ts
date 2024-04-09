@@ -97,7 +97,7 @@ export class IntegrationService {
         {
           name: 'appVersion',
           active: true,
-          type: 'string',
+          type: 'version',
         },
       ],
     }
