@@ -114,7 +114,7 @@ export class PromotionService {
     if (result.failureResults.length >= 1) {
       evaluationResult.success = false;
       evaluationResult.message = 'No cumple con las reglas.';
-      for (const failure of result.failureResults){
+      for (const failure of result.failureResults) {
         this.logger.log({
           requestId: '',
           serviceName: 'micro-promotions',
