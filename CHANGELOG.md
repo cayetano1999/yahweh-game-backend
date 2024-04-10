@@ -2,6 +2,10 @@
 
 <!-- [NEXT_ENTRY] -->
 
+## [v0.0.30-alpha.1](https://APAPDigital@dev.azure.com/APAPDigital/APAPPMovil/_git/micro-promotions?version=GTv0.0.30-alpha.1) - 2024-04-10
+
+
+
 ## [v0.0.29-beta.1](https://dev.azure.com/APAPDigital/APAPPMovil/_git/micro-promotions?version=GTv0.0.29-beta.1) - 2024-04-09
 
 
