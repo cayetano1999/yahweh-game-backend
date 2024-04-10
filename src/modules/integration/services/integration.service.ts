@@ -119,7 +119,7 @@ export class IntegrationService {
           type: 'number',
         },
         {
-          name: 'terminosAceptados',
+          name: 'somosTerminosAceptados',
           active: true,
           type: 'boolean',
         },
