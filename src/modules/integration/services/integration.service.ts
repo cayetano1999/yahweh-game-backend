@@ -118,6 +118,11 @@ export class IntegrationService {
           active: true,
           type: 'number',
         },
+        {
+          name: 'terminosAceptados',
+          active: true,
+          type: 'boolean',
+        },
       ],
     };
   }
