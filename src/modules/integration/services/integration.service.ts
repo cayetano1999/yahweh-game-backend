@@ -1,8 +1,9 @@
 import { Model } from 'mongoose';
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { Integration } from '../interfaces/integration.interface';
 import { Logger } from '../../common/logger/services/logger/logger.service';
 import { IntegrationConstats as IntegrationConstants } from '../constant';
+import { IntegrationDto } from '../dtos/integration-dto';
 
 @Injectable()
 export class IntegrationService {
@@ -51,6 +52,29 @@ export class IntegrationService {
     return this.integrationModel.find().exec();
   }
 
+  addIntegration(integration: IntegrationDto): Promise<Integration> {
+    return this.integrationModel.create(integration)
+  }
+
+  async updateIntegration(id: any, integration: Integration): Promise<Integration> {
+    const updateIntegration = await this.integrationModel.findByIdAndUpdate(
+      id,
+      integration,
+      {
+        new: true,
+      },
+    );
+
+    return updateIntegration;
+  }
+
+  async deleteIntegration(id: any): Promise<Integration> {
+    const deletedIntegration = await this.integrationModel.findByIdAndDelete(id);
+    if (!deletedIntegration)
+      throw new NotFoundException('Promocion a eliminar no encontrada.');
+
+    return deletedIntegration;
+  }
 
   getAppMovilIntegraion() {
     return {

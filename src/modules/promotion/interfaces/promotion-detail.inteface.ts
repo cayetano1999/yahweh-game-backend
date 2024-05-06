@@ -5,5 +5,5 @@ export interface IPromotionDetail {
     actionType: string;
     actionValue: string;
     btnConfirmText: string
+}
 
-} 

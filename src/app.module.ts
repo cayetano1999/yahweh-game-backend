@@ -1,5 +1,5 @@
 import { ConfigModule } from '@nestjs/config';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CommonModule } from './modules/common/common.module';
@@ -16,7 +16,9 @@ import { PromotionModule } from './modules/promotion/promotion.module';
 import { ContactabilityModule } from './modules/contactability/contactability.module';
 import { CustomerModule } from './modules/customer/customer.module';
 import { ActionsModule } from './modules/actions/actions.module';
-
+import { IconModule } from './modules/icons/icon.module';
+import { NestFactory } from '@nestjs/core';
+import bodyParser from 'body-parser';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,6 +36,7 @@ import { ActionsModule } from './modules/actions/actions.module';
         abortEarly: true,
       },
       envFilePath: '.env',
+
     }),
     CommonModule,
     AuthModule,
@@ -43,8 +46,13 @@ import { ActionsModule } from './modules/actions/actions.module';
     ContactabilityModule,
     CustomerModule,
     ActionsModule,
+    IconModule,
+    
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  
+ 
+}
