@@ -3,7 +3,6 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IntegrationService } from '../services/integration.service';
 import { Integration } from '../interfaces/integration.interface';
 import { IntegrationDto } from '../dtos/integration-dto';
-import { Promotion } from '../../../../dist/modules/promotion copy/interfaces/promotion.interface';
 
 @ApiTags('integration')
 @Controller('integration')
