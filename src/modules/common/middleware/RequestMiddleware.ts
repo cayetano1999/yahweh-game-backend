@@ -1,19 +1,17 @@
 import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { v4 as uuidv4 } from 'uuid';
-import { Logger } from '../logger/services/logger/logger.service';
 
 @Injectable()
 export class HttpRequestMiddleware implements NestMiddleware {
-  constructor(private readonly logger: Logger) {}
+  constructor() {}
   use(req: Request, res: Response, next: NextFunction) {
     if (req.headers['requestId'] == null) {
-      req.headers['requestId'] = uuidv4();
-      this.logger.log({
+      req.headers['requestId'] = '123213123'
+      console.log(JSON.stringify({
         requestId: req.headers['requestId'] as any,
-        serviceName: 'micro-promotions',
+        serviceName: 'yahweh-backend',
         description: `Se ha generado el  requestId ${req.headers['requestId']}`,
-      });
+      }));
     }
     next();
   }

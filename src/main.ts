@@ -2,7 +2,6 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
-import { Logger } from './modules/common/logger/services/logger/logger.service';
 import { setupSwagger } from './modules/common/swagger/swagger.module';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { AuthService } from './modules/auth/services/auth.service';
@@ -16,7 +15,6 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     app.use(json({ limit: '50mb' })); // Ajusta el límite según tus necesidades
   const configService = app.get(ConfigService);
-  app.useLogger(new Logger(configService));
   if (configService.get('ENABLE_DOCUMENTATION') === 'true') {
     setupSwagger(app);
   }
@@ -39,6 +37,6 @@ async function bootstrap() {
   const appPort = configService.get<number>('PORT');
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(appPort);
+  await app.listen(8080);
 }
 bootstrap();

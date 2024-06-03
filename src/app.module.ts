@@ -4,31 +4,20 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CommonModule } from './modules/common/common.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { IntegrationModule } from './modules/integration/integration.module';
-import databaseConfig from './modules/common/database/config/database.config';
-import keycloakConfig from './modules/auth/config/keycloak.config';
-import rabbitConfig from './modules/common/rabbit/config/rabbit.config';
+// import databaseConfig from './modules/common/database/config/database.config';
 import httpConfig from './modules/common/http/config/htttp.config';
 import cacheConfig from './modules/common/cache/config/cache.config';
 import enviroment from './modules/common/config/config.module';
-import { RuleModule } from './modules/rule/rule.module';
-import { PromotionModule } from './modules/promotion/promotion.module';
-import { ContactabilityModule } from './modules/contactability/contactability.module';
-import { CustomerModule } from './modules/customer/customer.module';
-import { ActionsModule } from './modules/actions/actions.module';
-import { IconModule } from './modules/icons/icon.module';
-import { NestFactory } from '@nestjs/core';
-import bodyParser from 'body-parser';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './modules/user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
       load: [
-        databaseConfig,
+        // databaseConfig,
         cacheConfig,
-        keycloakConfig,
-        rabbitConfig,
         httpConfig,
       ],
       validate: enviroment,
@@ -40,13 +29,17 @@ import bodyParser from 'body-parser';
     }),
     CommonModule,
     AuthModule,
-    IntegrationModule,
-    RuleModule,
-    PromotionModule,
-    ContactabilityModule,
-    CustomerModule,
-    ActionsModule,
-    IconModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DATABASE_HOST || 'localhost',
+      port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
+      username: process.env.DATABASE_USER || 'cayetano',
+      password: process.env.DATABASE_PASSWORD || 'ada35111ff',
+      database: process.env.DATABASE_NAME || 'yahweh',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: false, // No usar en producción: puede perder datos.
+    }),
+    UsersModule
     
   ],
   controllers: [AppController],
