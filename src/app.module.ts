@@ -10,6 +10,8 @@ import cacheConfig from './modules/common/cache/config/cache.config';
 import enviroment from './modules/common/config/config.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/user/user.module';
+import { SwaggerModule } from '@nestjs/swagger';
+import { LevelModule } from './modules/level/level.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,11 +37,13 @@ import { UsersModule } from './modules/user/user.module';
       port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
       username: process.env.DATABASE_USER || 'cayetano',
       password: process.env.DATABASE_PASSWORD || 'ada35111ff',
-      database: process.env.DATABASE_NAME || 'yahweh',
+      database: process.env.DATABASE_NAME || 'yahweh-game',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false, // No usar en producción: puede perder datos.
     }),
-    UsersModule
+    SwaggerModule,
+    UsersModule,
+    LevelModule
     
   ],
   controllers: [AppController],

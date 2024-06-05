@@ -1,0 +1,14 @@
+{
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "cayetano",
+    "password": "ada35111ff",
+    "database": "yahweh-game",
+    "entities": ["dist/**/*.entity{.ts,.js}"],
+    "migrations": ["src/migrations/*{.ts,.js}"],
+    "cli": {
+      "migrationsDir": "src/migrations"
+    }
+  }
+  
