@@ -22,10 +22,9 @@ export class LevelController {
     return this.levelService.getLevelByUser(id)
   }
 
-  @Get()
-  findByEmail(@Query('email') email: string): Promise<any> {
-    console.log('yes', 'email')
-    return null; //this.usersService.getUserByEmail(email);
+  @Get('byCode/:code')
+  findByCode(@Param('code') code: number): Promise<any> {
+    return this.levelService.findOne(code)
   }
 
   @Delete(':id')

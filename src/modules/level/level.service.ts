@@ -23,11 +23,21 @@ export class LevelService {
     });
   }
 
-  findOne(id: number): Promise<Level> {
-    return this.levelRepository.findOne({
-      where: { id },
-      relations: ['users', 'questions', 'evaluations'],
+  async findOne(code: number): Promise<any> {
+    const level = await this.levelRepository.findOne({
+      where: { code: code },
+      relations: ['users', 'questions'],
     });
+
+    const newLevel = {
+      ...level,
+      levelUsersCount: level.users.length,
+      questionCount: level.questions.length
+    }
+
+    delete newLevel.users;
+    delete newLevel.questions;
+    return newLevel;
   }
 
   async createLevel(levelData: Partial<any>): Promise<Level> {
@@ -79,10 +89,8 @@ export class LevelService {
 
   async getLevelByUser(userId: number) {
 
-    console.log(userId)
     let levels = await this.levelRepository.find()
-    const evaluations = await this.userEvaluationRepository.find({where: {user: {id: userId}}, relations:['user']})
-  console.log(evaluations)
+    const evaluations = await this.userEvaluationRepository.find({where: {user: {id: userId}}, relations:['user', 'level']})
     let newLevels = levels.map((item)=> {
       let ev = evaluations.find((ev)=> ev?.user?.id == userId && ev?.level?.id == item.id);
       return {
@@ -90,9 +98,7 @@ export class LevelService {
         calification: ev?.calification || null,
       }
     })
-
     return newLevels;
-
 
   }
 }
