@@ -122,13 +122,14 @@ export class UsersService {
  async updateLevelAndEvaluation(levelEvaluation: UpdateLevelEvaluationDto) {
 
     //buscar usuario
-    const user = await this.usersRepository.findOneBy({ id: levelEvaluation.userId});
+    const user = await this.usersRepository.findOne({where: {id: levelEvaluation.userId}, relations:['levels']});
 
     if(!user){
       throw new NotFoundException('Usuario no encontrado')
     }
 
-    user.levels = levelEvaluation.levelId + 1 as any;
+    const userLevel = user.levels as any;
+    user.levels = userLevel.nextLevel as any;
     await this.usersRepository.save(user);
 
     const userEv: UserEvaluation = {
