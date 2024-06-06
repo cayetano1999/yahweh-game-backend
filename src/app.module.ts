@@ -12,6 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/user/user.module';
 import { SwaggerModule } from '@nestjs/swagger';
 import { LevelModule } from './modules/level/level.module';
+import { QuestionModule } from './modules/question/question.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -43,7 +44,8 @@ import { LevelModule } from './modules/level/level.module';
     }),
     SwaggerModule,
     UsersModule,
-    LevelModule
+    LevelModule,
+    QuestionModule
     
   ],
   controllers: [AppController],

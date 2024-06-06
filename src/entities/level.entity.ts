@@ -38,6 +38,9 @@ export class Level {
     @Column({nullable: false})
     valueTarget: number; // Cantidad de preguntas del nivel
 
+    // @Column({nullable: true})
+    // reward: number; // Cantidad de preguntas del nivel
+
     // Relaciones:
     @OneToMany(() => UserEntity, userEntity => userEntity.levels)
     @JoinColumn()

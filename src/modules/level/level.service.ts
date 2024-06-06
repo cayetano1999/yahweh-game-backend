@@ -89,7 +89,7 @@ export class LevelService {
 
   async getLevelByUser(userId: number) {
 
-    let levels = await this.levelRepository.find()
+    let levels = await this.levelRepository.find({order: {code: 'ASC'}})
     const evaluations = await this.userEvaluationRepository.find({where: {user: {id: userId}}, relations:['user', 'level']})
     let newLevels = levels.map((item)=> {
       let ev = evaluations.find((ev)=> ev?.user?.id == userId && ev?.level?.id == item.id);

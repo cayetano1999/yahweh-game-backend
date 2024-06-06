@@ -9,6 +9,8 @@ import { UserInfo } from '../../entities/user-info.entity';
 import { userInfo } from 'os';
 import { UserInfoDto } from '../../dtos/user/user-info.dto';
 import { Level } from 'src/entities/level.entity';
+import { UpdateLevelEvaluationDto } from 'src/dtos/user/update-level-evaluation.dto';
+import { UserEvaluation } from '../../entities/user-evaluation.entity';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +19,10 @@ export class UsersService {
     private usersRepository: Repository<UserEntity>,
 
     @InjectRepository(UserInfo)
-    private userInfoRepository: Repository<UserInfo>
+    private userInfoRepository: Repository<UserInfo>,
+
+    @InjectRepository(UserEvaluation)
+    private userEvaluationRepository: Repository<UserEvaluation>
 
   ) { }
 
@@ -112,6 +117,29 @@ export class UsersService {
       this.userInfoRepository.merge(userInfoResult, userInfo);
       return await this.userInfoRepository.save(userInfo);
     }
+  }
+
+ async updateLevelAndEvaluation(levelEvaluation: UpdateLevelEvaluationDto) {
+
+    //buscar usuario
+    const user = await this.usersRepository.findOneBy({ id: levelEvaluation.userId});
+
+    if(!user){
+      throw new NotFoundException('Usuario no encontrado')
+    }
+
+    user.levels = levelEvaluation.levelId + 1 as any;
+    await this.usersRepository.save(user);
+
+    const userEv: UserEvaluation = {
+      evaluationDate: new Date(),
+      user: levelEvaluation.userId as any,
+      level: levelEvaluation.levelId as any,
+      calification: levelEvaluation.calification,
+      id: 0
+    }
+    await this.userEvaluationRepository.save(userEv)
+
   }
 
   

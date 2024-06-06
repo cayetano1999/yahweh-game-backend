@@ -11,7 +11,7 @@ export class Question {
     @Column({ nullable: false })
     title: string;
 
-    @Column({ nullable: false })
+    @Column({ nullable: true })
     options: string;
 
     @Column({ nullable: false })
@@ -27,7 +27,7 @@ export class Question {
     graceTime: number;
 
     @Column({ nullable: false })
-    answer: number
+    answer: string
 
     @Column({ nullable: false })
     correctMessage: string;
