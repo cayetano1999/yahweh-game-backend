@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { FeedBack } from './feedback.entity';
 import { Level } from "./level.entity";
 import { UserEvaluation } from "./user-evaluation.entity";
 import { UserInfo } from "./user-info.entity";
@@ -49,4 +50,8 @@ export class UserEntity {
     @OneToMany(() => UserEvaluation, evaluation => evaluation.user)
     @JoinColumn()
     evaluations: UserEvaluation[];
+
+    @OneToMany(() => FeedBack, feedback => feedback.user)
+    feedbacks: FeedBack[];
+
 }

@@ -71,6 +71,11 @@ export class QuestionService {
     return this.questionRepository.save(updatedQuestion);
   }
 
+  async getQuestionsByQuantity(quantity: number): Promise<Question[]> {
+    const allQuestions = await this.findAll();
+    return this.getRandomItems(allQuestions, quantity);
+  }
+
   async remove(id: number): Promise<void> {
     const question = await this.findOne(id);
 

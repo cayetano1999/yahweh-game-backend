@@ -13,6 +13,7 @@ import { UsersModule } from './modules/user/user.module';
 import { SwaggerModule } from '@nestjs/swagger';
 import { LevelModule } from './modules/level/level.module';
 import { QuestionModule } from './modules/question/question.module';
+import { FeedBackModule } from './modules/feedback/feedback.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -45,7 +46,8 @@ import { QuestionModule } from './modules/question/question.module';
     SwaggerModule,
     UsersModule,
     LevelModule,
-    QuestionModule
+    QuestionModule,
+    FeedBackModule
     
   ],
   controllers: [AppController],

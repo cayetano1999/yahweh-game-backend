@@ -28,6 +28,11 @@ export class QuestionController {
     return this.questionService.getQuestionsByLevelCode(levelCode)
   }
 
+  @Get('questionsByQuantity/:quantity')
+  getQuestionsByQuantity(@Param('quantity') quantity: number): Promise<any> {
+    return this.questionService.getQuestionsByQuantity(quantity)
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string): Promise<void> {
     return null; //this.usersService.remove(id);
