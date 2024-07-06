@@ -14,6 +14,13 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { LevelModule } from './modules/level/level.module';
 import { QuestionModule } from './modules/question/question.module';
 import { FeedBackModule } from './modules/feedback/feedback.module';
+import { PlayerModule } from './modules/player/player.module';
+import { ChapterModule } from './modules/chapter/chapter.module';
+import { TeamModule } from './modules/team/team.module';
+import { ChurchModule } from './modules/church/church.module';
+import { ShiftModule } from './modules/shift/shift.module';
+import { GameModule } from './modules/game/game.module';
+import { InningModule } from './modules/inning/inning.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -47,7 +54,14 @@ import { FeedBackModule } from './modules/feedback/feedback.module';
     UsersModule,
     LevelModule,
     QuestionModule,
-    FeedBackModule
+    FeedBackModule,
+    PlayerModule,
+    ChapterModule,
+    TeamModule,
+    ChurchModule,
+    ShiftModule,
+    GameModule,
+    InningModule
     
   ],
   controllers: [AppController],
