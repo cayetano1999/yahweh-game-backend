@@ -34,6 +34,7 @@ export class Team {
   @OneToMany(() => Game, game => game.teamB)
   gamesAsTeamB: Game[];
 
-  @OneToMany(() => Inning, inning => inning.team)
-  innings: Inning[];
+  // @OneToMany(() => Inning, inning => inning.teamA)
+  // innings: Inning[];
+  
 }

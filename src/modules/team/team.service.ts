@@ -11,11 +11,11 @@ export class TeamService {
   ) {}
 
   findAll(): Promise<Team[]> {
-    return this.teamRepository.find({ relations: ['players', 'church', 'gamesAsTeamA', 'gamesAsTeamB', 'innings', 'players.shifts'] });
+    return this.teamRepository.find({ relations: ['players', 'church', 'gamesAsTeamA', 'gamesAsTeamB', 'players.shifts'] });
   }
 
   findOne(id: number): Promise<Team> {
-    return this.teamRepository.findOne({ where: { id }, relations: ['players', 'church', 'gamesAsTeamA', 'gamesAsTeamB', 'innings']});
+    return this.teamRepository.findOne({ where: { id }, relations: ['players', 'church', 'gamesAsTeamA', 'gamesAsTeamB']});
   }
 
   async remove(id: number): Promise<void> {

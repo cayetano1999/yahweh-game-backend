@@ -14,7 +14,7 @@ export class Shift {
   shiftType: string; // H1, H2, H3, BB, H4
 
   @Column({ nullable: false })
-  result: string; // success or no success
+  result: boolean; // success or no success
 
   @ManyToOne(() => Game, game => game.shifts)
   game: Game;
