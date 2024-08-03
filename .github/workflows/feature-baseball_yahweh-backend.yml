@@ -19,11 +19,11 @@ jobs:
           node-version: '18.x'
 
       - name: Configure npm to use authentication token
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          cat ~/.npmrc  # Para verificar el contenido
 
       - name: npm install, build, and test
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm install
           npm run build --if-present
