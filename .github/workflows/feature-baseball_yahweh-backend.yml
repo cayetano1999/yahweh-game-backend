@@ -19,9 +19,20 @@ jobs:
           node-version: '18.x'
 
       - name: Configure npm to use authentication token
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+          NPM_PASSWORD: ${{ secrets.NPM_PASSWORD }}
+          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
         run: |
-          echo "//registry.npmjs.org/:_authToken=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" > ~/.npmrc
-          cat ~/.npmrc  # Para verificacion el contenido
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          echo "@my-scope:registry=https://registry.npmjs.org/" >> ~/.npmrc
+          npm config set //registry.npmjs.org/:_authToken=${NPM_TOKEN}
+          npm config set registry https://registry.npmjs.org/
+          npm config set //registry.npmjs.org/:username ${NPM_USERNAME}
+          npm config set //registry.npmjs.org/:_password $(echo -n ${NPM_PASSWORD} | openssl base64)
+          npm config set //registry.npmjs.org/:email ${NPM_EMAIL}
+          npm config ls
 
       - name: npm install, build, and test
         run: |
@@ -44,7 +55,7 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+   
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
