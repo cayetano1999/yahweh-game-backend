@@ -27,7 +27,6 @@ export class PlayerController {
   create(@Body() player: Player): Promise<Player> {
     return this.playerService.create(player);
   }
-
   @Put(':id')
   update(@Param('id') id: string, @Body() player: Player): Promise<Player> {
     return this.playerService.update(+id, player);
