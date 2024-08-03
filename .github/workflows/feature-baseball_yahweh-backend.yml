@@ -20,7 +20,7 @@ jobs:
 
       - name: Configure npm to use authentication token
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=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" > ~/.npmrc
           cat ~/.npmrc  # Para verificacion el contenido
 
       - name: npm install, build, and test
