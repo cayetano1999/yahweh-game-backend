@@ -26,7 +26,9 @@ export class Chapter {
 
   @Column({nullable: true})   
   bookName: string;
-  
+
+  @Column({nullable: true})   
+  verses: number;
 
   @OneToMany(() => Player, player => player.chapter)
   players: Player[];
