@@ -49,4 +49,7 @@ export class Game {
 
   @OneToMany(() => Shift, shift => shift.game)
   shifts: Shift[];
+
+  @Column({ default: 0 })
+  teamWinnerId: number;
 }
