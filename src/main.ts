@@ -27,7 +27,7 @@ async function bootstrap() {
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe());
   app.use(cors())
-  await app.listen(1999);
+  await app.listen(appPort);
   // await app.listen(8080, '10.0.0.66');
 
 }
