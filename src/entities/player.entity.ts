@@ -6,7 +6,7 @@ import { Team } from './team.entity';
 
 
 @Entity('Player')
-export class Player {
+export class  Player {
   @PrimaryGeneratedColumn()
   id: number;
 

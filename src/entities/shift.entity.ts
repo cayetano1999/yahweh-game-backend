@@ -21,4 +21,7 @@ export class Shift {
 
   @Column({ default: 0 })
   rbis: number; // carreras impulsadas en el turno
+
+  @Column ({nullable: true})
+  verses: string;
 }
