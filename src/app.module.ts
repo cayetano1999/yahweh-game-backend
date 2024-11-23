@@ -42,11 +42,11 @@ import { InningModule } from './modules/inning/inning.module';
     AuthModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DATABASE_HOST || 'localhost',
-      port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
-      username: process.env.DATABASE_USER || 'cayetano',
-      password: process.env.DATABASE_PASSWORD || 'ada35111ff',
-      database: process.env.DATABASE_NAME || 'yahweh-game',
+      host: 'postgresql-187733-0.cloudclusters.net',
+      port: 10040,
+      username: 'yahweh',
+      password: 'ada35111ff',
+      database: 'yahweh-game',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false, // No usar en producción: puede perder datos.
     }),
