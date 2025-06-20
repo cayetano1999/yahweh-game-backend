@@ -10,6 +10,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { json } from 'body-parser';
 import * as cors from 'cors'; // Importa el módulo cors
+import { EncryptionMiddleware } from './middlewares/encryption.middleware';
+import { EncryptResponseMiddleware } from './middlewares/encryp-response.middleware';
 async function bootstrap() {
 
     const app = await NestFactory.create(AppModule);
@@ -24,10 +26,12 @@ async function bootstrap() {
     app.useGlobalGuards(new JwtAuthGuard(authService));
   }
   const appPort = configService.get<number>('PORT');
+  // app.use(new EncryptionMiddleware().use);
+  app.use(new EncryptResponseMiddleware().use);
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe());
   app.use(cors())
-  await app.listen(1999);
+  await app.listen(8080, '10.0.0.104');
   // await app.listen(8080, '10.0.0.66');
 
 }

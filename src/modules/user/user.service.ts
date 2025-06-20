@@ -107,7 +107,7 @@ export class UsersService {
       relations: ['levels', 'userInfo']
     });
   
-    return userExist || null;
+    return userExist || {error: true, message: 'Usuario no encontrado'};
   }
 
 
