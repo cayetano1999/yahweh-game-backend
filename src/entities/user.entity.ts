@@ -54,4 +54,10 @@ export class UserEntity {
     @OneToMany(() => FeedBack, feedback => feedback.user)
     feedbacks: FeedBack[];
 
+    @Column({nullable: false, default: true})
+    active: boolean;
+
+    @Column({nullable: true})
+    pushToken: string;
+
 }

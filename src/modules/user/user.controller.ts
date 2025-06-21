@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Delete, Post, Body, Query, Put } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Post, Body, Query, Put, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/dtos/user/create-user.dto';
 import { UserEntity } from 'src/entities/user.entity';
@@ -6,11 +6,12 @@ import { UsersService } from './user.service';
 import { UserInfoDto } from '../../dtos/user/user-info.dto';
 import { UserInfo } from '../../entities/user-info.entity';
 import { UpdateLevelEvaluationDto } from 'src/dtos/user/update-level-evaluation.dto';
+import { UserStatusDto } from 'src/dtos/user/user-status.dto';
 
 @Controller('User')
 @ApiTags('User')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Get('getAll')
   findAll(): Promise<UserEntity[]> {
@@ -47,4 +48,12 @@ export class UsersController {
   updateUserLevelEvaluation(@Body() userLevelEvaluation: UpdateLevelEvaluationDto): Promise<any> {
     return this.usersService.updateLevelAndEvaluation(userLevelEvaluation);
   }
+
+
+  @Patch('updateUserStatus')
+  updateUserStatus(@Body() userStatus: UserStatusDto): Promise<any> {
+    return this.usersService.updateUserStatus(userStatus);
+  }
+
+
 }
