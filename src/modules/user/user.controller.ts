@@ -7,6 +7,7 @@ import { UserInfoDto } from '../../dtos/user/user-info.dto';
 import { UserInfo } from '../../entities/user-info.entity';
 import { UpdateLevelEvaluationDto } from 'src/dtos/user/update-level-evaluation.dto';
 import { UserStatusDto } from 'src/dtos/user/user-status.dto';
+import { UpdatePushTokenDto } from 'src/dtos/user/update-pushtoken.dto';
 
 @Controller('User')
 @ApiTags('User')
@@ -53,6 +54,11 @@ export class UsersController {
   @Patch('updateUserStatus')
   updateUserStatus(@Body() userStatus: UserStatusDto): Promise<any> {
     return this.usersService.updateUserStatus(userStatus);
+  }
+
+  @Patch('updateUserPushToken')
+  updateUserPushToken(@Body() userPushDto: UpdatePushTokenDto): Promise<any> {
+    return this.usersService.updateUserPushToken(userPushDto);
   }
 
 

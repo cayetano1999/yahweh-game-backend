@@ -10,6 +10,7 @@ import { UserInfoDto } from '../../dtos/user/user-info.dto';
 import { UpdateLevelEvaluationDto } from 'src/dtos/user/update-level-evaluation.dto';
 import { UserEvaluation } from '../../entities/user-evaluation.entity';
 import { UserStatusDto } from 'src/dtos/user/user-status.dto';
+import { UpdatePushTokenDto } from 'src/dtos/user/update-pushtoken.dto';
 
 @Injectable()
 export class UsersService {
@@ -31,8 +32,9 @@ export class UsersService {
     });
   }
 
-  findOne(id: string): Promise<UserEntity> {
-    return this.usersRepository.findOne({ where: { id: Number(id) }, relations: ['levels', 'userInfo'] });
+  async findOne(id: string): Promise<UserEntity> {
+    const result = await this.usersRepository.findOne({ where: { id: Number(id) }, relations: ['levels', 'userInfo'] });
+    return result;
   }
 
   async remove(id: string): Promise<void> {
@@ -56,6 +58,26 @@ export class UsersService {
     }
     // Actualizar el estado del usuario
     const updatedUser = this.usersRepository.merge(user, { active: userStatus.status, email: userStatus.email });
+    // Validar el usuario actualizado
+    const errors = await validate(updatedUser);
+    if (errors.length > 0) {
+      throw new BadRequestException('Validation failed!');
+    }
+    // Guardar el usuario actualizado
+    return this.usersRepository.save(updatedUser);
+
+    // return this.usersRepository.save({ id, active: status });
+  }
+
+  async updateUserPushToken(userStatus: UpdatePushTokenDto): Promise<UserEntity> {
+
+    //buscar usuario
+    const user = await this.usersRepository.findOne({ where: { id: userStatus.id } });
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    // Actualizar el estado del usuario
+    const updatedUser = this.usersRepository.merge(user, { pushToken: userStatus.pushToken});
     // Validar el usuario actualizado
     const errors = await validate(updatedUser);
     if (errors.length > 0) {
