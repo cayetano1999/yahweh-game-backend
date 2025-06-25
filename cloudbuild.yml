@@ -1,0 +1,20 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "northamerica-south1-docker.pkg.dev/sinuous-aviary-457523-g1/image-registry/yahweh-game-backend",
+        "-f",
+        "dockerfile",
+        "--platform=linux/amd64",
+        ".",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "northamerica-south1-docker.pkg.dev/sinuous-aviary-457523-g1/image-registry/yahweh-game-backend",
+      ]
+options:
+  logging: CLOUD_LOGGING_ONLY
