@@ -1,28 +1,34 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToOne,
+} from 'typeorm';
 import { UserEntity } from './user.entity';
 
 @Entity('UserInfo')
 export class UserInfo {
-    @PrimaryGeneratedColumn()
-    id: number;
-  
-    @Column({nullable: false})
-    deviceName: string;
-  
-    @Column({nullable: false})
-    deviceId: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({nullable: false})
-    creationDate: Date;
+  @Column({ nullable: false })
+  deviceName: string;
 
-    @Column({nullable: false})
-    signUpMethod: string;
+  @Column({ nullable: false })
+  deviceId: string;
 
-    @Column({nullable: false})
-    onboardingAccepted: boolean;
+  @Column({ nullable: false })
+  creationDate: Date;
 
-    // Relaciones
-    @OneToOne(() => UserEntity, user => user.userInfo)
-    @JoinColumn()
-    user: UserEntity;
+  @Column({ nullable: false })
+  signUpMethod: string;
+
+  @Column({ nullable: false })
+  onboardingAccepted: boolean;
+
+  /*────────── Relaciones ──────────*/
+
+  /** Lado inverso: NO lleva JoinColumn porque la FK vive en User */
+  @OneToOne(() => UserEntity, user => user.userInfo)
+  user: UserEntity;
 }

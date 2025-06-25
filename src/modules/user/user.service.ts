@@ -1,16 +1,16 @@
 // users.service.ts
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entities/user.entity';
 import { validate } from 'class-validator';
 import { CreateUserDto } from 'src/dtos/user/create-user.dto';
 import { UserInfo } from '../../entities/user-info.entity';
-import { userInfo } from 'os';
 import { UserInfoDto } from '../../dtos/user/user-info.dto';
-import { Level } from 'src/entities/level.entity';
 import { UpdateLevelEvaluationDto } from 'src/dtos/user/update-level-evaluation.dto';
 import { UserEvaluation } from '../../entities/user-evaluation.entity';
+import { UserStatusDto } from 'src/dtos/user/user-status.dto';
+import { UpdatePushTokenDto } from 'src/dtos/user/update-pushtoken.dto';
 
 @Injectable()
 export class UsersService {
@@ -22,7 +22,7 @@ export class UsersService {
     private userInfoRepository: Repository<UserInfo>,
 
     @InjectRepository(UserEvaluation)
-    private userEvaluationRepository: Repository<UserEvaluation>
+    private userEvaluationRepository: Repository<UserEvaluation>,
 
   ) { }
 
@@ -32,13 +32,64 @@ export class UsersService {
     });
   }
 
-  findOne(id: string): Promise<UserEntity> {
-    return this.usersRepository.findOne({where: { id: Number(id)}, relations:['levels', 'userInfo'] });
+  async findOne(id: string): Promise<UserEntity> {
+    const result = await this.usersRepository.findOne({ where: { id: Number(id) }, relations: ['levels', 'userInfo'] });
+    return result;
   }
 
   async remove(id: string): Promise<void> {
-    await this.usersRepository.delete(id);
+    const user = await this.usersRepository.findOne({
+      where: { id: Number(id) },
+      relations: ['userInfo', 'evaluations', 'feedbacks', 'utilities'],
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    await this.usersRepository.remove(user); // Esto elimina en cascada
   }
+
+  async updateUserStatus(userStatus: UserStatusDto): Promise<UserEntity> {
+
+    //buscar usuario
+    const user = await this.usersRepository.findOne({ where: { id: userStatus.id } });
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    // Actualizar el estado del usuario
+    const updatedUser = this.usersRepository.merge(user, { active: userStatus.status, email: userStatus.email });
+    // Validar el usuario actualizado
+    const errors = await validate(updatedUser);
+    if (errors.length > 0) {
+      throw new BadRequestException('Validation failed!');
+    }
+    // Guardar el usuario actualizado
+    return this.usersRepository.save(updatedUser);
+
+    // return this.usersRepository.save({ id, active: status });
+  }
+
+  async updateUserPushToken(userStatus: UpdatePushTokenDto): Promise<UserEntity> {
+
+    //buscar usuario
+    const user = await this.usersRepository.findOne({ where: { id: userStatus.id } });
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    // Actualizar el estado del usuario
+    const updatedUser = this.usersRepository.merge(user, { pushToken: userStatus.pushToken});
+    // Validar el usuario actualizado
+    const errors = await validate(updatedUser);
+    if (errors.length > 0) {
+      throw new BadRequestException('Validation failed!');
+    }
+    // Guardar el usuario actualizado
+    return this.usersRepository.save(updatedUser);
+
+    // return this.usersRepository.save({ id, active: status });
+  }
+
+
 
   async createUser(userData: Partial<CreateUserDto>): Promise<UserEntity> {
 
@@ -101,30 +152,30 @@ export class UsersService {
     if (!email) {
       throw new BadRequestException("Email requerido");
     }
-  
+
     const userExist = await this.usersRepository.findOne({
       where: { email },
       relations: ['levels', 'userInfo']
     });
-  
-    return userExist || null;
+
+    return userExist || { error: true, message: 'Usuario no encontrado' };
   }
 
 
   async updateUserInfo(userInfo: UserInfoDto) {
-    const userInfoResult = await this.userInfoRepository.findOneBy({ id: userInfo.id});
+    const userInfoResult = await this.userInfoRepository.findOneBy({ id: userInfo.id });
     if (userInfoResult) {
       this.userInfoRepository.merge(userInfoResult, userInfo);
       return await this.userInfoRepository.save(userInfo);
     }
   }
 
- async updateLevelAndEvaluation(levelEvaluation: UpdateLevelEvaluationDto) {
+  async updateLevelAndEvaluation(levelEvaluation: UpdateLevelEvaluationDto) {
 
     //buscar usuario
-    const user = await this.usersRepository.findOne({where: {id: levelEvaluation.userId}, relations:['levels']});
+    const user = await this.usersRepository.findOne({ where: { id: levelEvaluation.userId }, relations: ['levels'] });
 
-    if(!user){
+    if (!user) {
       throw new NotFoundException('Usuario no encontrado')
     }
 
@@ -143,7 +194,7 @@ export class UsersService {
 
   }
 
-  
+
 
 
 }

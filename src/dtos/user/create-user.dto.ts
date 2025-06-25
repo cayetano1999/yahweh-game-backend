@@ -10,7 +10,8 @@ export class CreateUserDto {
     profilePhoto: string = '';
     country: string = '';
     levelsId: number = 0;
-
+    active: boolean = true;
+    pushToken: string = '';
     userInfo: UserInfoDto;
 }
 

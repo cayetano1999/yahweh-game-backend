@@ -21,6 +21,8 @@ import { ChurchModule } from './modules/church/church.module';
 import { ShiftModule } from './modules/shift/shift.module';
 import { GameModule } from './modules/game/game.module';
 import { InningModule } from './modules/inning/inning.module';
+import { EncryptionMiddleware } from './middlewares/encryption.middleware';
+import { UsersController } from './modules/user/user.controller';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -40,16 +42,6 @@ import { InningModule } from './modules/inning/inning.module';
     }),
     CommonModule,
     AuthModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'postgresql-187733-0.cloudclusters.net',
-      port: 10040,
-      username: 'yahweh',
-      password: 'ada35111ff',
-      database: 'yahweh-game',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: false, // No usar en producción: puede perder datos.
-    }),
     SwaggerModule,
     UsersModule,
     LevelModule,
@@ -61,13 +53,37 @@ import { InningModule } from './modules/inning/inning.module';
     ChurchModule,
     ShiftModule,
     GameModule,
-    InningModule
-    
+    InningModule,
+    TypeOrmModule.forRoot({
+      // type: 'postgres',
+      // host: process.env.DATABASE_HOST || 'localhost',
+      // port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
+      // username: process.env.DATABASE_USER || 'cayetano',
+      // password: process.env.DATABASE_PASSWORD || 'ada35111ff',
+      // database: process.env.DATABASE_NAME || 'yahweh-game',
+      // entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      // synchronize: false, // No usar en producción: puede perder datos.
+
+      type: 'postgres',
+      host: "postgresql-198815-0.cloudclusters.net", //process.env.DATABASE_HOST || 'localhost',
+      port: 19991, //parseInt(process.env.DATABASE_PORT, 10) || 5432,
+      username: "yahweh", //process.env.DATABASE_USER ,
+      password: "ada35111ff", //process.env.DATABASE_PASSWORD || 'ada35111ff',
+      database: "yahweh", //process.env.DATABASE_NAME || 'yahweh-game',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: false,
+    }),
+
+
+
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {
-  
- 
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(EncryptionMiddleware).forRoutes(UsersController);
+
+  }
+
 }

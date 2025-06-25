@@ -6,6 +6,7 @@ import { UsersService } from './user.service';
 import { UsersController } from './user.controller';
 import { UserInfo } from '../../entities/user-info.entity';
 import { UserEvaluation } from '../../entities/user-evaluation.entity';
+import { FeedBack } from 'src/entities/feedback.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity]), TypeOrmModule.forFeature([UserInfo]), TypeOrmModule.forFeature([UserEvaluation])],
