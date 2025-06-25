@@ -15,6 +15,10 @@ use(_req: Request, res: Response, next: NextFunction) {
   const originalSend = res.send.bind(res);
 
   res.send = (body: any): Response => {
+
+    if(!body) {
+      return originalSend(body);
+    }
     try {
       const payload = typeof body === 'object' ? body : JSON.parse(body);
       const encrypted = CryptoJS.AES.encrypt(
