@@ -52,6 +52,7 @@
     "reflect-metadata": "^0.2.1",
     "rimraf": "^5.0.5",
     "rxjs": "^7.8.1",
+    "superagent": "^10.2.1",
     "swagger-ui-express": "^5.0.0",
     "tweetnacl": "^1.0.3",
     "tweetnacl-util": "^0.15.1",
