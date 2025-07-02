@@ -23,6 +23,7 @@ import { GameModule } from './modules/game/game.module';
 import { InningModule } from './modules/inning/inning.module';
 import { EncryptionMiddleware } from './middlewares/encryption.middleware';
 import { UsersController } from './modules/user/user.controller';
+import { UtilitiesModule } from './modules/utilities/utilities.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -54,6 +55,7 @@ import { UsersController } from './modules/user/user.controller';
     ShiftModule,
     GameModule,
     InningModule,
+    UtilitiesModule,
     TypeOrmModule.forRoot({
       // type: 'postgres',
       // host: process.env.DATABASE_HOST || 'localhost',

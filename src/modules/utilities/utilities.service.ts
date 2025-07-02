@@ -1,0 +1,93 @@
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { validate } from 'class-validator';
+import { Utilities } from 'src/entities/utilities.entity';
+import { UserEntity } from 'src/entities/user.entity';
+import { UtilitiesDto } from 'src/dtos/utilities/utilities.dto';
+
+@Injectable()
+export class UtilitiesService {
+  constructor(
+    @InjectRepository(Utilities)
+    private readonly utilitiesRepository: Repository<Utilities>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+  ) { }
+
+  async findAll(): Promise<UtilitiesDto[]> {
+    const utilities = await this.utilitiesRepository.find({ relations: ['user'] });
+    return utilities.map(this.toDto);
+  }
+
+  async findOne(id: number): Promise<UtilitiesDto> {
+    const utilities = await this.utilitiesRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+    if (!utilities) throw new NotFoundException(`Utilities with ID ${id} not found`);
+    return this.toDto(utilities);
+  }
+
+  async createUtilities(dto: UtilitiesDto): Promise<UtilitiesDto> {
+    // Buscar el usuario por ID y asignar la relación
+    // const user = await this.userRepository.findOne({ where: { id: data.user } });
+    // if (!user) throw new BadRequestException('User not found');
+
+    // const entity = this.utilitiesRepository.create({
+    //   ...data,
+    //   user,
+    // });
+    // const errors = await validate(entity);
+    // if (errors.length > 0) throw new BadRequestException('Validation failed!');
+
+    // const saved = await this.utilitiesRepository.save(entity);
+    // return this.toDto(saved);
+    const user = await this.userRepository.findOne({ where: { id: dto.user } });
+    if (!user) throw new BadRequestException('User not found');
+
+    const entity = this.utilitiesRepository.create({
+      currencies: dto.currencies,
+      lives: dto.lives,
+      gems: dto.gems,
+      user,
+    });
+    const saved = await this.utilitiesRepository.save(entity);
+    return this.toDto(saved);
+  }
+
+  async updateUtilities(id: number, data: Partial<UtilitiesDto>): Promise<UtilitiesDto> {
+    const utilities = await this.utilitiesRepository.findOne({ where: { id }, relations: ['user'] });
+    if (!utilities) throw new NotFoundException(`Utilities with ID ${id} not found`);
+
+    // Si incluye 'user', actualiza la relación
+    if (data.user) {
+      const user = await this.userRepository.findOne({ where: { id: data.user } });
+      if (!user) throw new BadRequestException('User not found');
+      utilities.user = user;
+    }
+    Object.assign(utilities, data);
+
+    const errors = await validate(utilities);
+    if (errors.length > 0) throw new BadRequestException('Validation failed!');
+
+    const updated = await this.utilitiesRepository.save(utilities);
+    return this.toDto(updated);
+  }
+
+  async remove(id: number): Promise<void> {
+    const utilities = await this.utilitiesRepository.findOne({ where: { id } });
+    if (!utilities) throw new NotFoundException(`Utilities with ID ${id} not found`);
+    await this.utilitiesRepository.delete(id);
+  }
+
+  private toDto(entity: Utilities): UtilitiesDto {
+    return {
+      id: entity.id,
+      currencies: entity.currencies,
+      lives: entity.lives,
+      gems: entity.gems,
+      user: entity.user?.id,
+    };
+  }
+}

@@ -33,7 +33,7 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<UserEntity> {
-    const result = await this.usersRepository.findOne({ where: { id: Number(id) }, relations: ['levels', 'userInfo'] });
+    const result = await this.usersRepository.findOne({ where: { id: Number(id) }, relations: ['levels', 'userInfo', 'utilities'] });
     return result;
   }
 
