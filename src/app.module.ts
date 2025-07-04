@@ -24,6 +24,10 @@ import { InningModule } from './modules/inning/inning.module';
 import { EncryptionMiddleware } from './middlewares/encryption.middleware';
 import { UsersController } from './modules/user/user.controller';
 import { UtilitiesModule } from './modules/utilities/utilities.module';
+import { UtilitiesController } from './modules/utilities/utilities.controller';
+import { FeedBackController } from './modules/feedback/feedback.controller';
+import { QuestionController } from './modules/question/question.controller';
+import { LevelController } from './modules/level/level.controller';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -84,7 +88,14 @@ import { UtilitiesModule } from './modules/utilities/utilities.module';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(EncryptionMiddleware).forRoutes(UsersController);
+    consumer.apply(EncryptionMiddleware).forRoutes(
+      UsersController, 
+      UtilitiesController,
+      FeedBackController,
+      QuestionController,
+      LevelController,
+    );
+    
 
   }
 

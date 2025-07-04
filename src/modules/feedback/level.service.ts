@@ -32,12 +32,6 @@ export class FeedBackService {
 
   async createFeedback(feedbackData: Partial<FeedBack>): Promise<FeedBack> {
     const newFeedback = this.feedbackRepository.create(feedbackData);
-    const errors = await validate(newFeedback);
-
-    if (errors.length > 0) {
-      throw new BadRequestException('Validation failed!');
-    }
-
     return this.feedbackRepository.save(newFeedback);
   }
 

@@ -30,19 +30,6 @@ export class UtilitiesService {
   }
 
   async createUtilities(dto: UtilitiesDto): Promise<UtilitiesDto> {
-    // Buscar el usuario por ID y asignar la relación
-    // const user = await this.userRepository.findOne({ where: { id: data.user } });
-    // if (!user) throw new BadRequestException('User not found');
-
-    // const entity = this.utilitiesRepository.create({
-    //   ...data,
-    //   user,
-    // });
-    // const errors = await validate(entity);
-    // if (errors.length > 0) throw new BadRequestException('Validation failed!');
-
-    // const saved = await this.utilitiesRepository.save(entity);
-    // return this.toDto(saved);
     const user = await this.userRepository.findOne({ where: { id: dto.user } });
     if (!user) throw new BadRequestException('User not found');
 
@@ -56,9 +43,9 @@ export class UtilitiesService {
     return this.toDto(saved);
   }
 
-  async updateUtilities(id: number, data: Partial<UtilitiesDto>): Promise<UtilitiesDto> {
-    const utilities = await this.utilitiesRepository.findOne({ where: { id }, relations: ['user'] });
-    if (!utilities) throw new NotFoundException(`Utilities with ID ${id} not found`);
+  async updateUtilities(data: UtilitiesDto): Promise<UtilitiesDto> {
+    const utilities = await this.utilitiesRepository.findOne({ where: { id: data.id }, relations: ['user'] });
+    if (!utilities) throw new NotFoundException(`Utilities with ID ${data.id} not found`);
 
     // Si incluye 'user', actualiza la relación
     if (data.user) {
@@ -68,8 +55,8 @@ export class UtilitiesService {
     }
     Object.assign(utilities, data);
 
-    const errors = await validate(utilities);
-    if (errors.length > 0) throw new BadRequestException('Validation failed!');
+    // const errors = await validate(utilities);
+    // if (errors.length > 0) throw new BadRequestException('Validation failed!');
 
     const updated = await this.utilitiesRepository.save(utilities);
     return this.toDto(updated);

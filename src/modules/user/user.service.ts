@@ -58,11 +58,7 @@ export class UsersService {
     }
     // Actualizar el estado del usuario
     const updatedUser = this.usersRepository.merge(user, { active: userStatus.status, email: userStatus.email });
-    // Validar el usuario actualizado
-    const errors = await validate(updatedUser);
-    if (errors.length > 0) {
-      throw new BadRequestException('Validation failed!');
-    }
+   
     // Guardar el usuario actualizado
     return this.usersRepository.save(updatedUser);
 
@@ -78,11 +74,7 @@ export class UsersService {
     }
     // Actualizar el estado del usuario
     const updatedUser = this.usersRepository.merge(user, { pushToken: userStatus.pushToken});
-    // Validar el usuario actualizado
-    const errors = await validate(updatedUser);
-    if (errors.length > 0) {
-      throw new BadRequestException('Validation failed!');
-    }
+    
     // Guardar el usuario actualizado
     return this.usersRepository.save(updatedUser);
 
@@ -104,11 +96,7 @@ export class UsersService {
     newUser.levels = 1 as any;
     newUser.userInfo = null;
     newUser.utilities = null;
-    const errors = await validate(newUser);
-
-    if (errors.length > 0) {
-      throw new BadRequestException('Validation failed!');
-    }
+  
 
     const user = await this.usersRepository.save(newUser as UserEntity);
     console.log(user)
@@ -129,10 +117,7 @@ export class UsersService {
     }
 
     const updatedUser = this.usersRepository.merge(user, updateData);
-    const errors = await validate(updatedUser);
-    if (errors.length > 0) {
-      throw new BadRequestException('Validation failed!');
-    }
+    
 
     if (updateData.userInfo) {
       const userInfo = await this.userInfoRepository.findOneBy({ id: user.userInfo.id });
@@ -155,7 +140,7 @@ export class UsersService {
 
     const userExist = await this.usersRepository.findOne({
       where: { email },
-      relations: ['levels', 'userInfo']
+      relations: ['levels', 'userInfo', 'utilities']
     });
 
     return userExist || { error: true, message: 'Usuario no encontrado' };

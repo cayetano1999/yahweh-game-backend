@@ -29,12 +29,11 @@ export class UtilitiesController {
     return this.utilitiesService.createUtilities(dto);
   }
 
-  @Put(':id')
+  @Put()
   update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateData: Partial<UtilitiesDto>
+    @Body() updateData: UtilitiesDto
   ): Promise<UtilitiesDto> {
-    return this.utilitiesService.updateUtilities(id, updateData);
+    return this.utilitiesService.updateUtilities(updateData);
   }
 
   @Delete(':id')
