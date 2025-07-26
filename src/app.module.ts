@@ -28,6 +28,7 @@ import { UtilitiesController } from './modules/utilities/utilities.controller';
 import { FeedBackController } from './modules/feedback/feedback.controller';
 import { QuestionController } from './modules/question/question.controller';
 import { LevelController } from './modules/level/level.controller';
+import { PushModule } from './modules/push/push.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -60,6 +61,7 @@ import { LevelController } from './modules/level/level.controller';
     GameModule,
     InningModule,
     UtilitiesModule,
+    PushModule,
     TypeOrmModule.forRoot({
       // type: 'postgres',
       // host: process.env.DATABASE_HOST || 'localhost',
