@@ -29,6 +29,8 @@ import { FeedBackController } from './modules/feedback/feedback.controller';
 import { QuestionController } from './modules/question/question.controller';
 import { LevelController } from './modules/level/level.controller';
 import { PushModule } from './modules/push/push.module';
+import { RoomModule } from './modules/room/room.module';
+import { RoomController } from './modules/room/room.controller';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -62,6 +64,7 @@ import { PushModule } from './modules/push/push.module';
     InningModule,
     UtilitiesModule,
     PushModule,
+    RoomModule,
     TypeOrmModule.forRoot({
       // type: 'postgres',
       // host: process.env.DATABASE_HOST || 'localhost',
@@ -96,6 +99,7 @@ export class AppModule {
       FeedBackController,
       QuestionController,
       LevelController,
+      RoomController
     );
     
 

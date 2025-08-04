@@ -19,6 +19,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('topPlayers')
+  getTopPlayers(): Promise<any> {
+    return this.usersService.getTop3Players();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string): Promise<UserEntity> {
     return this.usersService.findOne(id);
@@ -38,6 +43,11 @@ export class UsersController {
   @Post()
   add(@Body() user: CreateUserDto): Promise<UserEntity> {
     return this.usersService.createUser(user);
+  }
+
+  @Put('updateUserData/:id')
+  updateUserData(@Param('id') id: number, @Body() userInfo: Partial<CreateUserDto>): Promise<UserEntity> {
+    return this.usersService.updateUser(id, userInfo);
   }
 
   @Put('updateUserInfo')
@@ -60,6 +70,7 @@ export class UsersController {
   updateUserPushToken(@Body() userPushDto: UpdatePushTokenDto): Promise<any> {
     return this.usersService.updateUserPushToken(userPushDto);
   }
+
 
 
 }

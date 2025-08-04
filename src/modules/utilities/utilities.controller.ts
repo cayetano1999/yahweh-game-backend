@@ -14,6 +14,17 @@ export class UtilitiesController {
     return this.utilitiesService.findAll();
   }
 
+  @Post('update-currencies-after-game')
+  async updateCurrenciesAfterGame(
+    @Body()
+    dto: {
+      winner: { id: number; currencies: number };
+      loser: { id: number; currencies: number };
+    }
+  ): Promise<any[]> {
+    return this.utilitiesService.updateCurrenciesAfterGameSP(dto);
+  }
+  
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number): Promise<UtilitiesDto> {
     return this.utilitiesService.findOne(id);
@@ -40,4 +51,7 @@ export class UtilitiesController {
   remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.utilitiesService.remove(id);
   }
+
+
+
 }

@@ -20,12 +20,12 @@ export const serviceAccount = {
 @Injectable()
 export class PushService {
   constructor() {
-console.log(serviceAccount.client_email)
-    if (!admin.apps.length) {
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-      });
-    }
+// console.log(serviceAccount.client_email)
+//     if (!admin.apps.length) {
+//       admin.initializeApp({
+//         credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+//       });
+//     }
   }
 
   async sendPushNotification(tokens: string[], title: string, body: string, data: any = {}) {
