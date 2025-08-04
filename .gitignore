@@ -10,7 +10,7 @@ lerna-debug.log*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # FIREBASE CM
-assets/jsons/firebase-service-account.json
+config/firebase-service-account.json
 
 # Runtime data
 pids

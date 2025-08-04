@@ -30,8 +30,7 @@ async function bootstrap() {
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe());
   app.use(cors())
-  await app.listen(3000, '10.0.0.106');
-  // await app.listen(8080, '10.0.0.66');
+  await app.listen(3000, '0.0.0.0');
 
 }
 bootstrap();
