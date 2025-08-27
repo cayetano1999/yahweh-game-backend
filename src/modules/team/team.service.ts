@@ -26,7 +26,13 @@ export class TeamService {
     return this.teamRepository.save(team);
   }
 
-  update(id: number, team: Team): Promise<Team> {
-    return this.teamRepository.save({ ...team, id });
+  async update(id: number, team: Team): Promise<Team> {
+    // return this.teamRepository.save({ ...team, id });
+
+    await this.teamRepository.update(id, {
+    ...team
+  });
+  // Devuelve el entity actualizado (con la relación si quieres)
+  return this.findOne(id);
   }
 }

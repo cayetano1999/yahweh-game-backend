@@ -31,6 +31,15 @@ import { LevelController } from './modules/level/level.controller';
 import { PushModule } from './modules/push/push.module';
 import { RoomModule } from './modules/room/room.module';
 import { RoomController } from './modules/room/room.controller';
+import { ChapterController } from './modules/chapter/chapter.controller';
+import { ChurchController } from './modules/church/church.controller';
+import { GameController } from './modules/game/game.controller';
+import { ShiftController } from './modules/shift/shift.controller';
+import { TeamController } from './modules/team/team.controller';
+import { TournamentModule } from './modules/tournament/tournament.module';
+import { TournamentController } from './modules/tournament/tournament.controller';
+import { PlayerController } from './modules/player/player.controller';
+import { InningController } from './modules/inning/inning.controller';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -65,6 +74,7 @@ import { RoomController } from './modules/room/room.controller';
     UtilitiesModule,
     PushModule,
     RoomModule,
+    TournamentModule,
     TypeOrmModule.forRoot({
       // type: 'postgres',
       // host: process.env.DATABASE_HOST || 'localhost',
@@ -99,7 +109,16 @@ export class AppModule {
       FeedBackController,
       QuestionController,
       LevelController,
-      RoomController
+      RoomController,
+      ChapterController,
+      ChurchController,
+      GameController,
+      ShiftController,
+      TeamController,
+      GameController,
+      TournamentController,
+      PlayerController,
+      InningController
     );
     
 
