@@ -67,4 +67,7 @@ export class Game {
   @Column({ type: 'varchar', length: 255, nullable: true })
   gameType: string;
 
+  @Column({ default: false })
+  isDeleted: boolean;
+
 }

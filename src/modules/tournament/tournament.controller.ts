@@ -20,7 +20,7 @@ export class TournamentController {
   constructor(private readonly tournamentService: TournamentService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos los torneos' })
+  @ApiOperation({ summary: 'Listar todos los torneos del beisbol' })
   @ApiResponse({ status: 200, type: [Tournament] })
   findAll(): Promise<Tournament[]> {
     return this.tournamentService.findAll();

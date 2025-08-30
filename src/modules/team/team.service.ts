@@ -10,16 +10,23 @@ export class TeamService {
     private teamRepository: Repository<Team>,
   ) {}
 
-  findAll(): Promise<Team[]> {
-    return this.teamRepository.find({ relations: ['players', 'church', 'gamesAsTeamA', 'gamesAsTeamB', 'players.shifts'] });
-  }
+ async findAll(): Promise<Team[]> {
+  const teams = await this.teamRepository
+    .createQueryBuilder('team')
+    .leftJoinAndSelect('team.church', 'church')
+    .leftJoinAndSelect('team.players', 'player', 'player.isDeleted = false')
+    .where('team.isDeleted = false')
+    .getMany();
+
+  return teams;
+}
 
   findOne(id: number): Promise<Team> {
-    return this.teamRepository.findOne({ where: { id }, relations: ['players', 'church', 'gamesAsTeamA', 'gamesAsTeamB']});
+    return this.teamRepository.findOne({ where: { id, isDeleted: false }, relations: ['players', 'church'] });
   }
 
   async remove(id: number): Promise<void> {
-    await this.teamRepository.delete(id);
+    await this.teamRepository.update(id, { isDeleted: true });
   }
 
   create(team: Team): Promise<Team> {

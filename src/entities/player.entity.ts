@@ -30,4 +30,7 @@ export class  Player {
 
   @OneToMany(() => Shift, shift => shift.player)
   shifts: Shift[];
+
+  @Column({ default: false })
+  isDeleted: boolean;
 }

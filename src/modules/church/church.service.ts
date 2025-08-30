@@ -11,15 +11,15 @@ export class ChurchService {
   ) {}
 
   findAll(): Promise<Church[]> {
-    return this.churchRepository.find({ relations: ['players', 'teams'] });
+    return this.churchRepository.find({ where: { isDeleted: false }, relations: [] });
   }
 
   findOne(id: number): Promise<Church> {
-    return this.churchRepository.findOne({ where: { id }, relations: ['players', 'teams'] });
+    return this.churchRepository.findOne({ where: { id, isDeleted: false }, relations: [] });
   }
 
   async remove(id: number): Promise<void> {
-    await this.churchRepository.delete(id);
+    await this.churchRepository.update(id, { isDeleted: true });
   }
 
   create(church: Church): Promise<Church> {

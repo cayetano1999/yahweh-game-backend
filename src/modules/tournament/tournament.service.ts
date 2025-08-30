@@ -12,12 +12,12 @@ export class TournamentService {
   ) {}
 
   findAll(): Promise<Tournament[]> {
-    return this.tournamentRepo.find({ relations: ['winnerTeam'] });
+    return this.tournamentRepo.find({ where: { isDeleted: false }, relations: ['winnerTeam'] });
   }
 
   async findOne(id: number): Promise<Tournament> {
     const item = await this.tournamentRepo.findOne({
-      where: { id },
+      where: { id, isDeleted: false },
       relations: ['winnerTeam'],
     });
     if (!item) throw new NotFoundException(`Tournament ${id} no encontrado`);
@@ -43,6 +43,6 @@ export class TournamentService {
 
   async remove(id: number): Promise<void> {
     const entity = await this.findOne(id);
-    await this.tournamentRepo.remove(entity);
+    await this.tournamentRepo.update(entity.id, { isDeleted: true });
   }
 }

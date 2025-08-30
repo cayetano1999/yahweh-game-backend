@@ -33,4 +33,7 @@ export class Tournament {
   // 👇 Relación inversa: un torneo tiene muchos juegos
   @OneToMany(() => Game, (game) => game.tournament)
   games: Game[];
+
+  @Column({ default: false })
+  isDeleted: boolean;
 }

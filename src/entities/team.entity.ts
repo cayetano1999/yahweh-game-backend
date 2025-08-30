@@ -36,5 +36,7 @@ export class Team {
 
   // @OneToMany(() => Inning, inning => inning.teamA)
   // innings: Inning[];
-  
+  @Column({ default: false })
+  isDeleted: boolean;
+
 }

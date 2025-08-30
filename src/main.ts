@@ -17,9 +17,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(json({ limit: '50mb' })); // Ajusta el límite según tus necesidades
   const configService = app.get(ConfigService);
-  if (configService.get('ENABLE_DOCUMENTATION') === 'true') {
+  // if (configService.get('ENABLE_DOCUMENTATION') === 'true') {
     setupSwagger(app);
-  }
+  // }
   if (configService.get<string>('USE_AUTH') === 'true') {
     const authService = app.get(AuthService);
     app.useGlobalGuards(new JwtAuthGuard(authService));
@@ -30,7 +30,7 @@ async function bootstrap() {
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe());
   app.use(cors())
-  await app.listen(3000, '0.0.0.0');
+  await app.listen(3000);
 
 }
 bootstrap();
