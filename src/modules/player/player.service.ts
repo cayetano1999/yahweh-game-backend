@@ -15,7 +15,7 @@ export class PlayerService {
   }
 
   findOne(id: number): Promise<Player> {
-    return this.playerRepository.findOne({ where: { id, isDeleted: false }, relations: ['team', 'chapter', 'church']})
+    return this.playerRepository.findOne({ where: { id, isDeleted: false }, relations: ['team', 'chapter', 'church', 'shifts']})
   }
 
   async remove(id: number): Promise<void> {
