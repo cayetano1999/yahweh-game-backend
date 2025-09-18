@@ -23,7 +23,6 @@ export class EncryptResponseMiddleware implements NestMiddleware {
       const notEncrypt = ['/Player', '/Tournament', '/Chapter', '/Church', '/Team', '/Shift', '/Game', '/Inning'].some(route => _req.url.includes(route));
       if (notEncrypt) {
         console.log('No se encripta la respuesta para la ruta:', _req.url);
-        console.log('Respuesta original:', body);
         return originalSend(body);
       }
 

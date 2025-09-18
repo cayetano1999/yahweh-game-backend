@@ -92,16 +92,13 @@ export class UsersService {
     }
 
     const newUser = this.usersRepository.create(userData);
-    console.log(newUser);
     newUser.levels = 1 as any;
     newUser.userInfo = null;
     newUser.utilities = null;
 
 
     const user = await this.usersRepository.save(newUser as UserEntity);
-    console.log(user)
     userData.userInfo['user'] = user.id
-    console.log(userData.userInfo)
     const userInfo = await this.userInfoRepository.save(userData.userInfo);
     user.userInfo = userInfo.id as any;
 

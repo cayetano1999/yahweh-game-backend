@@ -11,7 +11,7 @@ export class ShiftService {
   ) {}
 
   findAll(): Promise<Shift[]> {
-    return this.shiftRepository.find({ relations: ['player', 'game'] });
+    return this.shiftRepository.find({ relations: ['player', 'game', 'player.team'] });
   }
 
   findOne(id: number): Promise<Shift> {
