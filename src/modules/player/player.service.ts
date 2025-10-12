@@ -11,15 +11,15 @@ export class PlayerService {
   ) {}
 
   findAll(): Promise<Player[]> {
-    return this.playerRepository.find({ relations: ['team', 'chapter', 'church', 'shifts'] });
+    return this.playerRepository.find({ where: { isDeleted: false }, relations: ['team', 'chapter', 'church'] });
   }
 
   findOne(id: number): Promise<Player> {
-    return this.playerRepository.findOne({ where: { id }, relations: ['team', 'chapter', 'church', 'shifts']})
+    return this.playerRepository.findOne({ where: { id, isDeleted: false }, relations: ['team', 'chapter', 'church', 'shifts']})
   }
 
   async remove(id: number): Promise<void> {
-    await this.playerRepository.delete(id);
+    await this.playerRepository.update(id, { isDeleted: true });
   }
 
   create(player: Player): Promise<Player> {

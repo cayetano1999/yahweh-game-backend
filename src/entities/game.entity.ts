@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Team } from './team.entity';
 import { Shift } from './shift.entity';
+import { Tournament } from './tournament.entity';
 
 @Entity('Game')
 export class Game {
@@ -52,4 +53,21 @@ export class Game {
 
   @Column({ default: 0 })
   teamWinnerId: number;
+
+  // 👇 FK obligatoria al torneo
+  @Column({ name: 'tournamentId', type: 'int', nullable: false })
+  tournamentId: number;
+
+  @ManyToOne(() => Tournament, (t) => t.games, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'tournamentId', referencedColumnName: 'id' })
+  tournament: Tournament;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  gameType: string;
+
+  @Column({ default: false })
+  isDeleted: boolean;
+
 }

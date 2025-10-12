@@ -86,20 +86,7 @@ export class QuestionService {
     await this.questionRepository.delete(id);
   }
 
-  // async getQuestionsByUser(userId: number) {
-  //   const questions = await this.questionRepository.find({ relations: ['level'] });
-  //   const evaluations = await this.userEvaluationRepository.find({ where: { user: { id: userId } }, relations: ['user', 'level'] });
 
-  //   const userQuestions = questions.map((question) => {
-  //     const evaluation = evaluations.find((eval) => eval.user.id === userId && eval.level.id === question.level.id);
-  //     return {
-  //       ...question,
-  //       calification: evaluation?.calification || null,
-  //     };
-  //   });
-
-  //   return userQuestions;
-  // }
 
   async getQuestionsByLevelCode(levelCode: number): Promise<Question[]> {
     const level = await this.levelRepository.findOne({ where: { code: levelCode } });
@@ -133,5 +120,24 @@ export class QuestionService {
   
     return result;
   }
+
+  async getQuestionsByLevelAndType(
+  difficulty: 'bajo' | 'medio' | 'alto',
+  types: ('multiple' | 'boolean' | 'written')[],
+  amount: number
+): Promise<Question[]> {
+  if (!difficulty || !types?.length || !amount) {
+    throw new BadRequestException('Parámetros incompletos');
+  }
+
+  
+
+  const result = await this.questionRepository.query(
+    `SELECT * FROM get_questions_by_level_and_type($1, $2, $3);`,
+    [difficulty, types, amount]
+  );
+
+  return result;
+}
   
 }

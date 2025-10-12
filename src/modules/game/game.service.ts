@@ -11,15 +11,15 @@ export class GameService {
   ) {}
 
   findAll(): Promise<Game[]> {
-    return this.gameRepository.find({ relations: ['teamA', 'teamB', 'homeClubTeam', 'shifts', 'homeClubTeam.church', 'teamB.church', 'homeClubTeam.players', 'teamB.players', 'homeClubTeam.players.shifts', 'teamB.players.shifts' ] });
+    return this.gameRepository.find({ where: { isDeleted: false }, relations: ['teamA', 'teamB',  'teamB.church', 'teamA.church'] });
   }
 
   findOne(id: number): Promise<Game> {
-    return this.gameRepository.findOne({ where: { id }, relations: ['teamA', 'teamB', 'homeClubTeam', 'shifts', 'homeClubTeam.church', 'teamB.church', 'homeClubTeam.players', 'teamB.players', 'homeClubTeam.players.shifts', 'teamB.players.shifts']});
+    return this.gameRepository.findOne({ where: { id, isDeleted: false }, relations: ['teamA', 'teamB', 'homeClubTeam', 'shifts', 'homeClubTeam.church', 'teamB.church', 'homeClubTeam.players', 'teamB.players', 'homeClubTeam.players.shifts', 'teamB.players.shifts']});
   }
 
   async remove(id: number): Promise<void> {
-    await this.gameRepository.delete(id);
+    await this.gameRepository.update(id, { isDeleted: true });
   }
 
   create(game: Game): Promise<Game> {

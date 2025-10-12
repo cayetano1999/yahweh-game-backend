@@ -58,7 +58,7 @@ export class UsersService {
     }
     // Actualizar el estado del usuario
     const updatedUser = this.usersRepository.merge(user, { active: userStatus.status, email: userStatus.email });
-   
+
     // Guardar el usuario actualizado
     return this.usersRepository.save(updatedUser);
 
@@ -73,8 +73,8 @@ export class UsersService {
       throw new NotFoundException('Usuario no encontrado');
     }
     // Actualizar el estado del usuario
-    const updatedUser = this.usersRepository.merge(user, { pushToken: userStatus.pushToken});
-    
+    const updatedUser = this.usersRepository.merge(user, { pushToken: userStatus.pushToken });
+
     // Guardar el usuario actualizado
     return this.usersRepository.save(updatedUser);
 
@@ -92,16 +92,13 @@ export class UsersService {
     }
 
     const newUser = this.usersRepository.create(userData);
-    console.log(newUser);
     newUser.levels = 1 as any;
     newUser.userInfo = null;
     newUser.utilities = null;
-  
+
 
     const user = await this.usersRepository.save(newUser as UserEntity);
-    console.log(user)
     userData.userInfo['user'] = user.id
-    console.log(userData.userInfo)
     const userInfo = await this.userInfoRepository.save(userData.userInfo);
     user.userInfo = userInfo.id as any;
 
@@ -117,7 +114,7 @@ export class UsersService {
     }
 
     const updatedUser = this.usersRepository.merge(user, updateData);
-    
+
 
     if (updateData.userInfo) {
       const userInfo = await this.userInfoRepository.findOneBy({ id: user.userInfo.id });
@@ -179,7 +176,11 @@ export class UsersService {
 
   }
 
-
+  async getTop3Players() {
+    console.log('Fetching top 3 players');
+    const result = await this.usersRepository.query(`SELECT * FROM get_top_3_players();`);
+    return result;
+  }
 
 
 }

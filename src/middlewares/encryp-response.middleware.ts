@@ -11,30 +11,37 @@ export class EncryptResponseMiddleware implements NestMiddleware {
     return CryptoJS.AES.encrypt(plaintext, this.secretKey).toString();
   }
 
-use(_req: Request, res: Response, next: NextFunction) {
-  const originalSend = res.send.bind(res);
+  use(_req: Request, res: Response, next: NextFunction) {
+    const originalSend = res.send.bind(res);
 
-  res.send = (body: any): Response => {
+    res.send = (body: any): Response => {
 
-    if(!body) {
-      return originalSend(body);
-    }
-    try {
-      const payload = typeof body === 'object' ? body : JSON.parse(body);
-      const encrypted = CryptoJS.AES.encrypt(
-        JSON.stringify(payload),
-        process.env.ENCRYPTION_KEY || 'TuClaveSecreta'
-      ).toString();
+      if (!body) {
+        return originalSend(body);
+      }
 
-      res.set('Content-Type', 'application/json');
-      return originalSend(JSON.stringify({ data: encrypted }));
-    } catch (error) {
-      console.error('Error al encriptar response:', error);
-      return originalSend(body);
-    }
-  };
+      const notEncrypt = ['/Player', '/Tournament', '/Chapter', '/Church', '/Team', '/Shift', '/Game', '/Inning'].some(route => _req.url.includes(route));
+      if (notEncrypt) {
+        console.log('No se encripta la respuesta para la ruta:', _req.url);
+        return originalSend(body);
+      }
 
-  next();
-}
+      try {
+        const payload = typeof body === 'object' ? body : JSON.parse(body);
+        const encrypted = CryptoJS.AES.encrypt(
+          JSON.stringify(payload),
+          process.env.ENCRYPTION_KEY || 'TuClaveSecreta'
+        ).toString();
+
+        res.set('Content-Type', 'application/json');
+        return originalSend(JSON.stringify({ data: encrypted }));
+      } catch (error) {
+        console.error('Error al encriptar response:', error);
+        return originalSend(body);
+      }
+    };
+
+    next();
+  }
 
 }

@@ -7,7 +7,8 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { AuthService } from './modules/auth/services/auth.service';
 import { ValidationPipe } from '@nestjs/common';
 import { json } from 'body-parser';
-import * as cors from 'cors'; // Importa el módulo cors
+// import * as cors from 'cors'; // Importa el módulo cors
+import cors from 'cors';
 import { EncryptResponseMiddleware } from './middlewares/encryp-response.middleware';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -30,7 +31,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cors())
   await app.listen(3000, '0.0.0.0');
-  // await app.listen(8080, '10.0.0.66');
 
 }
 bootstrap();

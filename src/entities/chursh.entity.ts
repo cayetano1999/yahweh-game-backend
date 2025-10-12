@@ -18,4 +18,7 @@ export class Church {
 
   @OneToMany(() => Team, team => team.church)
   teams: Team[];
+
+  @Column({ default: false })
+  isDeleted: boolean;
 }

@@ -1,8 +1,8 @@
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Module } from "@nestjs/common";
 import { Game } from "src/entities/game.entity";
-import { GameController } from "./game.controller";
 import { GameService } from "./game.service";
+import { GameController } from './game.controller';
 
 
 

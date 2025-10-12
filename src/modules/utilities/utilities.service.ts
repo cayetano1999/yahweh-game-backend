@@ -77,4 +77,22 @@ export class UtilitiesService {
       user: entity.user?.id,
     };
   }
+
+  async updateCurrenciesAfterGameSP(dto: {
+  winner: { id: number; currencies: number };
+  loser: { id: number; currencies: number };
+}): Promise<any[]> {
+  const query = `
+    SELECT * FROM update_utilities_after_game($1, $2, $3, $4)
+  `;
+  const params = [
+    dto.winner.id,
+    dto.winner.currencies,
+    dto.loser.id,
+    dto.loser.currencies,
+  ];
+
+  const result = await this.utilitiesRepository.query(query, params);
+  return result;
+}
 }
