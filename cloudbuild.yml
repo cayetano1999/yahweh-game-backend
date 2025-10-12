@@ -4,7 +4,7 @@ steps:
       [
         "build",
         "-t",
-        "us-west2-docker.pkg.dev/commanding-fact-466401-v0/image-registry/yahweh-game-backend",
+        "us-west2-docker.pkg.dev/quiet-odyssey-474900-g6/image-registry/yahweh-game-backend",
         "-f",
         "dockerfile",
         "--platform=linux/amd64",
@@ -14,7 +14,7 @@ steps:
     args:
       [
         "push",
-        "us-west2-docker.pkg.dev/commanding-fact-466401-v0/image-registry/yahweh-game-backend",
+        "us-west2-docker.pkg.dev/quiet-odyssey-474900-g6/image-registry/yahweh-game-backend",
       ]
 options:
   logging: CLOUD_LOGGING_ONLY
