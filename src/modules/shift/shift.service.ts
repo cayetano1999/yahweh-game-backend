@@ -22,6 +22,10 @@ export class ShiftService {
     await this.shiftRepository.delete(id);
   }
 
+  async removeMany(ids: number[]): Promise<void> {
+    await this.shiftRepository.delete(ids);
+  }
+
   create(shift: Shift): Promise<Shift> {
     return this.shiftRepository.save(shift);
   }

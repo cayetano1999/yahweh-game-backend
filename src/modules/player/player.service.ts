@@ -8,14 +8,14 @@ export class PlayerService {
   constructor(
     @InjectRepository(Player)
     private playerRepository: Repository<Player>,
-  ) {}
+  ) { }
 
   findAll(): Promise<Player[]> {
     return this.playerRepository.find({ where: { isDeleted: false }, relations: ['team', 'chapter', 'church'] });
   }
 
   findOne(id: number): Promise<Player> {
-    return this.playerRepository.findOne({ where: { id, isDeleted: false }, relations: ['team', 'chapter', 'church', 'shifts']})
+    return this.playerRepository.findOne({ where: { id, isDeleted: false }, relations: ['team', 'chapter', 'church', 'shifts'] })
   }
 
   async remove(id: number): Promise<void> {

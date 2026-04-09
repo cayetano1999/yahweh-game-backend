@@ -24,12 +24,12 @@ export class Chapter {
   @Column({ default: 0 })
   basesOnBallsCount: number;
 
-  @Column({nullable: true})   
+  @Column({ nullable: true })
   bookName: string;
 
-  @Column({nullable: true})   
+  @Column({ nullable: true })
   verses: number;
 
-  @OneToMany(() => Player, player => player.chapter)
+  @OneToMany(() => Player, player => player.chapter, { nullable: true })
   players: Player[];
 }

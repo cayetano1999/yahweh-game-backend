@@ -6,7 +6,7 @@ import { Team } from './team.entity';
 
 
 @Entity('Player')
-export class  Player {
+export class Player {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,7 +19,7 @@ export class  Player {
   @ManyToOne(() => Team, team => team.players)
   team: Team;
 
-  @ManyToOne(() => Chapter, chapter => chapter.players)
+  @ManyToOne(() => Chapter, chapter => chapter.players, { nullable: true })
   chapter: Chapter;
 
   @ManyToOne(() => Church, church => church.players)
@@ -33,4 +33,13 @@ export class  Player {
 
   @Column({ default: false })
   isDeleted: boolean;
+
+  @Column({ nullable: true })
+  bookName: string;
+
+  @Column({ nullable: true })
+  chapterNumber: number;
+
+  @Column({ nullable: true })
+  verses: number;
 }

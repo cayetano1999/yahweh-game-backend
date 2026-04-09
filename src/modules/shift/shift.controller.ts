@@ -23,6 +23,11 @@ export class ShiftController {
     return this.shiftService.remove(+id);
   }
 
+  @Post('delete-many')
+  removeMany(@Body('ids') ids: number[]): Promise<void> {
+    return this.shiftService.removeMany(ids);
+  }
+
   @Post()
   create(@Body() shift: Shift): Promise<Shift> {
     return this.shiftService.create(shift);
