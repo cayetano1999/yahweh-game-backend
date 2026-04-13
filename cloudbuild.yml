@@ -4,7 +4,7 @@ steps:
       [
         "build",
         "-t",
-        "us-west2-docker.pkg.dev/coherent-parity-484201-t4/image-registry/yahweh-game-backend",
+        "us-west2-docker.pkg.dev/project-d5ca9040-3396-4248-94f/image-registry/yahweh-game-backend",
         "-f",
         "dockerfile",
         "--platform=linux/amd64",
@@ -14,7 +14,7 @@ steps:
     args:
       [
         "push",
-        "us-west2-docker.pkg.dev/coherent-parity-484201-t4/image-registry/yahweh-game-backend",
+        "us-west2-docker.pkg.dev/project-d5ca9040-3396-4248-94f/image-registry/yahweh-game-backend",
       ]
 options:
   logging: CLOUD_LOGGING_ONLY
